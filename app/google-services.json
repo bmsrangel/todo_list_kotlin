@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "846382811572",
+    "project_id": "todo-list-kotlin-7662f",
+    "storage_bucket": "todo-list-kotlin-7662f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846382811572:android:70897fc7ce7701f4450ae1",
+        "android_client_info": {
+          "package_name": "br.com.bmsrangel.dev.todolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846382811572-2vr0lcnt6kuotdabdikk9g662n5fer14.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3-d-nVM7M0FyewyvQiVtdG-lRbwrB3Ks"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846382811572-2vr0lcnt6kuotdabdikk9g662n5fer14.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
