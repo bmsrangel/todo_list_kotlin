@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Todo List</string>
+    <string name="descriptionHintText">Descrição</string>
+    <string name="addButtonLabel">Adicionar</string>
+    <string name="removeButtonLabel">Remover</string>
+    <string name="clearButtonLabel">Limpar</string>
+    <string name="emailHintText">E-mail</string>
+    <string name="passwordHintText">Senha</string>
+    <string name="confirmPasswordHintText">Confirmar senha</string>
+    <string name="forgotPasswordButtonText">Esqueci minha senha</string>
+    <string name="loginButtonText">Entrar</string>
+    <string name="googleLoginButtonText">Entrar com Google</string>
+    <string name="registerButtonText">Registre-se!</string>
+    <string name="registerAccountText">Não possui conta?</string>
+    <string name="createAccountButtonText">Criar conta</string>
+    <string name="loginAppBarTitle">Entrar</string>
+    <string name="registerAppBarTitle">Criar Conta</string>
+    <string name="homeAppBarTitle">Lista de Tarefas</string>
 </resources>
