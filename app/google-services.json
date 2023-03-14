@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "846382811572-2vr0lcnt6kuotdabdikk9g662n5fer14.apps.googleusercontent.com",
+          "client_id": "846382811572-hp863gvpuq6ib8v3qai39n3chf323sb0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.bmsrangel.dev.todolist",
+            "certificate_hash": "40d959cf8fc8c14d12887cce7bbe5d2f0ac2cc77"
+          }
+        },
+        {
+          "client_id": "846382811572-ibntttp10cjo0fk8at5f4nu46i15kq85.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

@@ -15,6 +15,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.hide()
+
         val todos = arrayListOf<String>("Task 1", "Task 2", "Task 3", "Task 4")
 
         val todosListRef = findViewById<ListView>(R.id.todosList)
