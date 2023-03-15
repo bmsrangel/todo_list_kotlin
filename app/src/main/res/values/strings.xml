@@ -19,4 +19,5 @@
 
     <string name="passwordMismatchError">As senhas não coincidem</string>
     <string name="userRegistrationFailedError">Falha ao criar usuário</string>
+    <string name="loginFailedError">"Falha ao efetuar login"</string>
 </resources>

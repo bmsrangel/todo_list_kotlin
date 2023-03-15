@@ -20,6 +20,18 @@ import com.google.gson.reflect.TypeToken
 class MainActivity : AppCompatActivity() {
     private lateinit var gson: Gson
     private lateinit var prefs: SharedPreferences
+    private lateinit var firebaseAuth: FirebaseAuth
+
+    override fun onStart() {
+        super.onStart()
+        firebaseAuth = FirebaseAuth.getInstance()
+        val currentUser = firebaseAuth.currentUser
+        if (currentUser == null) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -28,8 +40,6 @@ class MainActivity : AppCompatActivity() {
 
         gson = Gson()
         prefs = getSharedPreferences("todos_kotlin", Context.MODE_PRIVATE)
-
-        val firebaseAuth = FirebaseAuth.getInstance()
 
         val googleSignOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
