@@ -19,5 +19,4 @@
 
     <string name="passwordMismatchError">As senhas não coincidem</string>
     <string name="userRegistrationFailedError">Falha ao criar usuário</string>
-    <string name="webClientId">846382811572-ibntttp10cjo0fk8at5f4nu46i15kq85.apps.googleusercontent.com</string>
 </resources>
