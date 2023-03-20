@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         val removeButtonRef = findViewById<Button>(R.id.btnRemove)
         val clearButtonRef = findViewById<Button>(R.id.btnClear)
         val logoutButtonRef = findViewById<ImageView>(R.id.btnLogout)
+        val profileButtonRef = findViewById<ImageView>(R.id.btnProfile)
 
         addButtonRef.setOnClickListener {
             val description = editTextDescription.text.toString()
@@ -97,6 +98,13 @@ class MainActivity : AppCompatActivity() {
             googleSignInClient.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            finish()
+        }
+
+        profileButtonRef.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 

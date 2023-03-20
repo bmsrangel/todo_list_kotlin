@@ -16,8 +16,15 @@
     <string name="loginAppBarTitle">Entrar</string>
     <string name="registerAppBarTitle">Criar Conta</string>
     <string name="homeAppBarTitle">Lista de Tarefas</string>
+    <string name="profileAppBarTitle">Perfil</string>
 
     <string name="passwordMismatchError">As senhas não coincidem</string>
     <string name="userRegistrationFailedError">Falha ao criar usuário</string>
     <string name="loginFailedError">"Falha ao efetuar login"</string>
+    <string name="homeButtonDescription">Tela inicial</string>
+    <string name="nameHintText">Nome</string>
+    <string name="lastNameHintText">Sobrenome</string>
+    <string name="profileUpdateButtonText">Atualizar Perfil</string>
+    <string name="cameraFABDescription">Carregar imagem da câmera</string>
+    <string name="profileLogoutButtonText">Sair da conta</string>
 </resources>
