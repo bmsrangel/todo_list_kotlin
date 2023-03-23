@@ -8,21 +8,19 @@ import android.widget.EditText
 import android.widget.Toast
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
-import br.com.bmsrangel.dev.todolist.app.core.repositories.auth.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
-    @Inject
-    lateinit var authRepository: AuthRepository
+    private lateinit var firebaseAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         supportActionBar?.hide()
+
+        firebaseAuth = FirebaseAuth.getInstance()
 
         val editTxtEmail = findViewById<EditText>(R.id.editTextEmailAddress)
         val editTxtPassword = findViewById<EditText>(R.id.editTextPassword)
@@ -34,14 +32,15 @@ class RegisterActivity : AppCompatActivity() {
             val password = editTxtPassword.text.toString()
             val confirmPassword = editTxtConfirmPassword.text.toString()
             if (password == confirmPassword) {
-                val newUserDTO = RegisterDTO(email, password)
-                val isRegistrationSuccessful = authRepository.register(newUserDTO)
-                if (isRegistrationSuccessful) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(baseContext, R.string.userRegistrationFailedError, Toast.LENGTH_SHORT).show()
+                firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(baseContext, R.string.userRegistrationFailedError, Toast.LENGTH_SHORT).show()
+                    }
                 }
+
             } else {
                 Toast.makeText(baseContext, R.string.passwordMismatchError, Toast.LENGTH_SHORT).show()
             }
