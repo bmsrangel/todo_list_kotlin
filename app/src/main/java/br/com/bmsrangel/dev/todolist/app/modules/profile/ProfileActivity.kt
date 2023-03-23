@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist
+package br.com.bmsrangel.dev.todolist.app.modules.profile
 
 import android.Manifest
 import android.content.Intent
@@ -15,11 +15,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
+import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileActivity : AppCompatActivity() {
     private val PERMISSION_REQUEST_CAMERA = 0
     private val PERMISSON_REQUEST_READ_EXTERNAL_STORAGE = 1
@@ -64,6 +69,7 @@ class ProfileActivity : AppCompatActivity() {
             var photoUrl = currentUser.photoUrl
 
             val splittedName = displayName?.split(" ")
+            // TODO: Verify if the display name contains in fact 2 names; change to handle the case where there's just first name
             val firstName = splittedName?.first()
             val lastName = splittedName?.last()
 

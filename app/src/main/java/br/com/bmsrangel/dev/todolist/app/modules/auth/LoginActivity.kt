@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist
+package br.com.bmsrangel.dev.todolist.app.modules.auth
 
 import android.app.Activity
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

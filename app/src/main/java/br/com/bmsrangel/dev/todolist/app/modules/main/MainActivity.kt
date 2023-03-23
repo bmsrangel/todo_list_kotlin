@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist
+package br.com.bmsrangel.dev.todolist.app.modules.main
 
 import android.content.Context
 import android.content.Intent
@@ -11,12 +11,17 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ListView
+import br.com.bmsrangel.dev.todolist.app.modules.profile.ProfileActivity
+import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var gson: Gson
     private lateinit var prefs: SharedPreferences
