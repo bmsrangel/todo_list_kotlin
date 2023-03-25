@@ -8,7 +8,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.core.content.ContextCompat.startActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
+import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -17,10 +24,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var googleSignInClient: GoogleSignInClient
+
+    private val authViewModel: AuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,14 +59,18 @@ class LoginActivity : AppCompatActivity() {
         loginButtonRef.setOnClickListener {
             val email = editTxtEmail.text.toString()
             val password = editTxtPassword.text.toString()
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) {task ->
-                if (task.isSuccessful) {
+
+            val loginDTO = LoginDTO(email, password)
+            authViewModel.login(loginDTO)
+
+            authViewModel.getUser().observe(this, Observer {
+                it.fold({
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                } else {
+                }, {
                     Toast.makeText(this, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
-                }
-            }
+                })
+            })
         }
 
         googleLoginButtonRef.setOnClickListener {
