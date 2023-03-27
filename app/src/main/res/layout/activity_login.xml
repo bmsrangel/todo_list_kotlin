@@ -64,15 +64,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword" />
 
-    <Button
-        android:id="@+id/btnGoogleLogin"
-        android:layout_width="0dp"
+    <fragment
+        android:id="@+id/googleLoginFragment"
+        class="br.com.bmsrangel.dev.todolist.app.modules.auth.fragments.GoogleLoginFragment"
+        tools:layout="@layout/fragment_google_login"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:text="@string/googleLoginButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +84,7 @@
         android:text="@string/registerAccountText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnGoogleLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/googleLoginFragment" />
 
     <Button
         android:id="@+id/btnRegister"

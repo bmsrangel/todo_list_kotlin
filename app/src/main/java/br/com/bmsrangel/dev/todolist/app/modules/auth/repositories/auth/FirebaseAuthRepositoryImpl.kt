@@ -10,7 +10,9 @@ import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
 import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import javax.inject.Inject
@@ -19,7 +21,7 @@ class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: F
     override fun login(loginDTO: LoginDTO): LiveData<Result<UserModel?>> {
         val userResult = MutableLiveData<Result<UserModel?>>()
         try {
-            val task = firebaseAuth.signInWithEmailAndPassword(loginDTO.email, loginDTO.password).addOnCompleteListener {
+            firebaseAuth.signInWithEmailAndPassword(loginDTO.email, loginDTO.password).addOnCompleteListener {
                 if (it.isSuccessful) {
                     val firebaseUser = it.result.user
                     userResult.postValue(Result.success(UserModel(firebaseUser!!.uid, firebaseUser.displayName, firebaseUser.email!!, firebaseUser.photoUrl.toString())))
@@ -56,5 +58,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: F
 
     override fun resetPassword(email: String): Void {
         TODO("Not yet implemented")
+    }
+
+    override fun signInWithGoogle(accountIdToken: String): LiveData<Result<UserModel?>> {
+        val userResult = MutableLiveData<Result<UserModel?>>()
+        try {
+            val credential = GoogleAuthProvider.getCredential(accountIdToken, null)
+            firebaseAuth.signInWithCredential(credential).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val firebaseUser = it.result.user
+                    userResult.postValue(Result.success(UserModel(firebaseUser!!.uid, firebaseUser.displayName, firebaseUser.email!!, firebaseUser.photoUrl.toString())))
+                } else {
+                    userResult.postValue(Result.failure(java.lang.Exception()))
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            userResult.postValue(Result.failure(e))
+        }
+        return userResult
     }
 }

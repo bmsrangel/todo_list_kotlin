@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".app.modules.auth.fragments.GoogleLoginFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/btnGoogleLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@android:color/holo_red_dark"
+        android:text="@string/googleLoginButtonText" />
+
+</FrameLayout>

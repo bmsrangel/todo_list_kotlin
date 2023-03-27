@@ -12,21 +12,16 @@ import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var firebaseAuth: FirebaseAuth
-
     private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
 
         supportActionBar?.hide()
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         val editTxtName = findViewById<EditText>(R.id.editTextName)
         val editTxtEmail = findViewById<EditText>(R.id.editTextEmailAddress)
