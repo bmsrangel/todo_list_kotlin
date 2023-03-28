@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     tools:context=".app.modules.auth.fragments.GoogleLoginFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <Button
         android:id="@+id/btnGoogleLogin"
         android:layout_width="match_parent"
