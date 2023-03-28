@@ -1,12 +1,17 @@
 package br.com.bmsrangel.dev.todolist.app.modules.profile
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -22,36 +27,37 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
-class ProfileActivity : AppCompatActivity() {
+class ProfileFragment : Fragment() {
     private val PERMISSION_REQUEST_CAMERA = 0
     private val PERMISSON_REQUEST_READ_EXTERNAL_STORAGE = 1
 
-    var _image: Bitmap? = null
+    private var image: Bitmap? = null
 
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var activity: Activity
+    private lateinit var view: View
 
     companion object {
         private const val REQUEST_IMAGE_GALLERY = 1
         private const val REQUEST_IMAGE_CAPTURE = 2
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
 
-        supportActionBar?.hide()
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        activity = requireActivity()
+        view = inflater.inflate(R.layout.fragment_profile, container, false)
+        val homeButtonRef = view.findViewById<ImageView>(R.id.btnHome)
+        val cameraButtonRef = view.findViewById<FloatingActionButton>(R.id.fabCamera)
+        val galleryButtonRef = view.findViewById<FloatingActionButton>(R.id.fabGallery)
+        val updateButtonRef = view.findViewById<Button>(R.id.btnUpdateProfile)
+        val logoutButtonRef = view.findViewById<Button>(R.id.btnProfileLogout)
 
-        val homeButtonRef = findViewById<ImageView>(R.id.btnHome)
-        val cameraButtonRef = findViewById<FloatingActionButton>(R.id.fabCamera)
-        val galleryButtonRef = findViewById<FloatingActionButton>(R.id.fabGallery)
-        val updateButtonRef = findViewById<Button>(R.id.btnUpdateProfile)
-        val logoutButtonRef = findViewById<Button>(R.id.btnProfileLogout)
-
-        val emailEditTxtRef = findViewById<EditText>(R.id.editTextProfileEmailAddress)
-        val firstNameEditTextRef = findViewById<EditText>(R.id.editTextFirstName)
-        val lastNameEditTextRef = findViewById<EditText>(R.id.editTextLastName)
+        val emailEditTxtRef = view.findViewById<EditText>(R.id.editTextProfileEmailAddress)
+        val firstNameEditTextRef = view.findViewById<EditText>(R.id.editTextFirstName)
+        val lastNameEditTextRef = view.findViewById<EditText>(R.id.editTextLastName)
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -60,12 +66,12 @@ class ProfileActivity : AppCompatActivity() {
             .requestEmail()
             .build()
 
-        val googleSignInClient = GoogleSignIn.getClient(this, googleSignOptions)
+        val googleSignInClient = GoogleSignIn.getClient(activity, googleSignOptions)
 
-        var currentUser = firebaseAuth.currentUser
+        val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
-            var displayName = currentUser.displayName
-            var email = currentUser.email
+            val displayName = currentUser.displayName
+            val email = currentUser.email
             var photoUrl = currentUser.photoUrl
 
             val splittedName = displayName?.split(" ")
@@ -79,9 +85,8 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         homeButtonRef.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(activity, MainActivity::class.java)
             startActivity(intent)
-            finish()
         }
 
         cameraButtonRef.setOnClickListener {
@@ -96,12 +101,12 @@ class ProfileActivity : AppCompatActivity() {
             galleryLauncher.launch(intent)
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSON_REQUEST_READ_EXTERNAL_STORAGE)
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSON_REQUEST_READ_EXTERNAL_STORAGE)
         }
 
         updateButtonRef.setOnClickListener {
@@ -111,10 +116,11 @@ class ProfileActivity : AppCompatActivity() {
         logoutButtonRef.setOnClickListener {
             firebaseAuth.signOut()
             googleSignInClient.signOut()
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
-            finish()
         }
+        // Inflate the layout for this fragment
+        return view
     }
 
     override fun onRequestPermissionsResult(
@@ -126,39 +132,39 @@ class ProfileActivity : AppCompatActivity() {
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 println("Camera")
-                Toast.makeText(this, "Permissão de câmera concedida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Permissão de câmera concedida", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Permissão de câmera negada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Permissão de câmera negada", Toast.LENGTH_SHORT).show()
             }
         } else if (requestCode == PERMISSON_REQUEST_READ_EXTERNAL_STORAGE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 println("Galeria")
-                Toast.makeText(this, "Permissão de galeria concedida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Permissão de galeria concedida", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Permissão de galeria negada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Permissão de galeria negada", Toast.LENGTH_SHORT).show()
             }
 
         }
     }
 
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result ->
-        if(result.resultCode == RESULT_OK) {
+            result ->
+        if(result.resultCode == AppCompatActivity.RESULT_OK) {
             val capturedImage = result.data?.extras?.get("data") as Bitmap
-            this._image = capturedImage
-            val profileImageRef = findViewById<ImageView>(R.id.profileImage)
+            this.image = capturedImage
+            val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
             profileImageRef.setImageBitmap(capturedImage)
 
         }
     }
 
     private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        result ->
-        if (result.resultCode == RESULT_OK) {
-            val selectedImage: Uri? = result.data?.data;
-            var imageBitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImage)
-            this._image = imageBitmap
-            val profileImageRef = findViewById<ImageView>(R.id.profileImage)
+            result ->
+        if (result.resultCode == AppCompatActivity.RESULT_OK) {
+            val selectedImage: Uri? = result.data?.data
+            val imageBitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, selectedImage)
+            this.image = imageBitmap
+            val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
             profileImageRef.setImageBitmap(imageBitmap)
         }
     }
@@ -166,4 +172,5 @@ class ProfileActivity : AppCompatActivity() {
     private fun saveProfile() {}
 
     private fun saveLocalFile() {}
+
 }

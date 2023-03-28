@@ -29,4 +29,7 @@
     <string name="profileLogoutButtonText">Sair da conta</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="navTasksTitle">Tarefas</string>
+    <string name="navProfileTitle">Perfil</string>
+    <string name="galleryFabDescription">Carregar imagem da galeria</string>
 </resources>
