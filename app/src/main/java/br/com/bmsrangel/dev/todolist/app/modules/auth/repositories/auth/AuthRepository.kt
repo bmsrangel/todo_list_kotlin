@@ -7,8 +7,8 @@ import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 interface AuthRepository {
-    fun login(loginDTO: LoginDTO): LiveData<Result<UserModel?>>
-    fun register(registerDTO: RegisterDTO): LiveData<Result<UserModel?>>
-    fun resetPassword(email: String): Void
-    fun signInWithGoogle(accountIdToken: String): LiveData<Result<UserModel?>>
+    suspend fun login(loginDTO: LoginDTO): Result<UserModel>
+    suspend fun register(registerDTO: RegisterDTO): Result<UserModel>
+    suspend fun resetPassword(email: String): Void
+    suspend fun signInWithGoogle(accountIdToken: String): Result<UserModel>
 }

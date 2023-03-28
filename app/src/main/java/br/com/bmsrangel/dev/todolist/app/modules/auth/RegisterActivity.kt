@@ -12,6 +12,8 @@ import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.ErrorAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -38,12 +40,13 @@ class RegisterActivity : AppCompatActivity() {
                 val registerDTO = RegisterDTO(email, password, name)
                 authViewModel.register(registerDTO)
                 authViewModel.getUser().observe(this, Observer {
-                    it.fold({
+                    if (it is SuccessAuthState) {
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                    }, {
+                        finish()
+                    } else if (it is ErrorAuthState) {
                         Toast.makeText(this, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
-                    })
+                    }
                 })
             } else {
                 Toast.makeText(baseContext, R.string.passwordMismatchError, Toast.LENGTH_SHORT).show()

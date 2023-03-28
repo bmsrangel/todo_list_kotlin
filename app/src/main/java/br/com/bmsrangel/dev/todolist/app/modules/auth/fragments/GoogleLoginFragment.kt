@@ -15,6 +15,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.ErrorAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -77,12 +79,12 @@ class GoogleLoginFragment : Fragment() {
     private fun updateUI(account: GoogleSignInAccount) {
         authViewModel.loginWithGoogle(account.idToken)
         authViewModel.getUser().observe(this, Observer {
-            it.fold({
+            if (it is SuccessAuthState) {
                 val intent = Intent(activity, MainActivity::class.java)
                 startActivity(intent)
-            }, {
+            } else if (it is ErrorAuthState) {
                 Toast.makeText(activity, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
-            })
+            }
         })
     }
 }

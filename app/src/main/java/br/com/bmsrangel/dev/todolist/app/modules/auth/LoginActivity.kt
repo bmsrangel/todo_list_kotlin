@@ -11,6 +11,9 @@ import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.ErrorAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.LoadingAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,12 +41,13 @@ class LoginActivity : AppCompatActivity() {
             authViewModel.login(loginDTO)
 
             authViewModel.getUser().observe(this, Observer {
-                it.fold({
+                if (it is SuccessAuthState) {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                }, {
+                    finish()
+                } else if (it is ErrorAuthState) {
                     Toast.makeText(this, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
-                })
+                }
             })
         }
 
