@@ -22,7 +22,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
-import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,7 +48,6 @@ class ProfileFragment : Fragment() {
     ): View {
         activity = requireActivity()
         view = inflater.inflate(R.layout.fragment_profile, container, false)
-        val homeButtonRef = view.findViewById<ImageView>(R.id.btnHome)
         val cameraButtonRef = view.findViewById<FloatingActionButton>(R.id.fabCamera)
         val galleryButtonRef = view.findViewById<FloatingActionButton>(R.id.fabGallery)
         val updateButtonRef = view.findViewById<Button>(R.id.btnUpdateProfile)
@@ -82,11 +80,6 @@ class ProfileFragment : Fragment() {
             emailEditTxtRef.setText(email)
             firstNameEditTextRef.setText(firstName)
             lastNameEditTextRef.setText(lastName)
-        }
-
-        homeButtonRef.setOnClickListener {
-            val intent = Intent(activity, MainActivity::class.java)
-            startActivity(intent)
         }
 
         cameraButtonRef.setOnClickListener {
