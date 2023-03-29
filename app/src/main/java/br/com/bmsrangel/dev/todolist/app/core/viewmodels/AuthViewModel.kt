@@ -26,7 +26,12 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
 
     fun getUserFromLocalStorage() {
         val user = userService.getUser()
-        this.userLiveData
+        if (user != null) {
+            userLiveData.value = SuccessAuthState(user)
+        } else {
+            userLiveData.value = UnauthenticatedAuthState()
+        }
+
     }
 
     fun login(loginDTO: LoginDTO) {
@@ -74,5 +79,9 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
                 userLiveData.value = InitialState()
             })
         }
+    }
+
+    fun signOut() {
+        authRepository.signOut()
     }
 }

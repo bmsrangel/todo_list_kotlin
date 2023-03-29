@@ -35,6 +35,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <ProgressBar
+            android:id="@+id/tasksProgressBar"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:visibility="gone"
@@ -110,7 +111,7 @@
             <ListView
                 android:id="@+id/todosList"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="match_parent"
                 android:layout_marginHorizontal="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

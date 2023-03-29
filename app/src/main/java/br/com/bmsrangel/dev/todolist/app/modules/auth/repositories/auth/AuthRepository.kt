@@ -11,4 +11,5 @@ interface AuthRepository {
     suspend fun register(registerDTO: RegisterDTO): Result<UserModel>
     suspend fun resetPassword(email: String): Void
     suspend fun signInWithGoogle(accountIdToken: String): Result<UserModel>
+    fun signOut()
 }
