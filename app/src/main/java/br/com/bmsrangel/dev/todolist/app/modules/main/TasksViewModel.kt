@@ -3,6 +3,7 @@ package br.com.bmsrangel.dev.todolist.app.modules.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import br.com.bmsrangel.dev.todolist.app.modules.main.repositories.tasks.TasksRepository
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.ErrorTasksState
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TasksViewModel @Inject constructor(private val tasksRepository: TasksRepository): ViewModel() {
-    private val tasksLiveData = MutableLiveData<TasksState>()
+    private var tasksLiveData = MutableLiveData<TasksState>()
 
     fun tasks() = tasksLiveData as LiveData<TasksState>
 
@@ -21,7 +22,7 @@ class TasksViewModel @Inject constructor(private val tasksRepository: TasksRepos
         // Transforms.switchMap, perhaps?
         val result = tasksRepository.getTasksByUserId(userId)
         result.fold({
-                    tasksLiveData.value = SuccessTasksState(it)
+            tasksLiveData = it.map { taskList -> SuccessTasksState(taskList) } as MutableLiveData<TasksState>
         }, {
             tasksLiveData.value = ErrorTasksState(it.message)
         })
