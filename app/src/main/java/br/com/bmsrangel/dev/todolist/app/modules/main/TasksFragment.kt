@@ -17,6 +17,7 @@ import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -44,6 +45,8 @@ class TasksFragment : Fragment() {
         val googleSignInClient = GoogleSignIn.getClient(activity, googleSignOptions)
 
         val logoutButtonRef = view.findViewById<ImageView>(R.id.btnLogout)
+
+        val newTaskButtonRef = view.findViewById<FloatingActionButton>(R.id.btnNewTask)
 
         val taskListViewRef = view.findViewById<ListView>(R.id.todosList)
         val progressIndicator = view.findViewById<ProgressBar>(R.id.tasksProgressBar)
@@ -82,6 +85,10 @@ class TasksFragment : Fragment() {
                 }
 
             }
+        }
+        newTaskButtonRef.setOnClickListener {
+            val intent = Intent(activity, SingleTaskActivity::class.java)
+            startActivity(intent)
         }
         return view
     }

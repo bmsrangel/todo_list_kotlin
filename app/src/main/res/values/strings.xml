@@ -32,4 +32,8 @@
     <string name="navTasksTitle">Tarefas</string>
     <string name="navProfileTitle">Perfil</string>
     <string name="galleryFabDescription">Carregar imagem da galeria</string>
+    <string name="newTaskDescriptionHintText">Descrição</string>
+    <string name="newTaskTitleText">Nova Tarefa</string>
+    <string name="newTaskDateHintText">Data</string>
+    <string name="btnSaveText">Salvar</string>
 </resources>
