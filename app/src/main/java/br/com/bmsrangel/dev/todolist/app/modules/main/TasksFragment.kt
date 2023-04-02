@@ -10,10 +10,12 @@ import android.widget.*
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.UnauthenticatedAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
+import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -23,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class TasksFragment : Fragment() {
     private val authViewModel: AuthViewModel by viewModels()
     private val tasksViewModel: TasksViewModel by viewModels()
+    private lateinit var user: UserModel
 
     override fun onStart() {
         super.onStart()
@@ -49,10 +52,14 @@ class TasksFragment : Fragment() {
         val progressIndicator = view.findViewById<ProgressBar>(R.id.tasksProgressBar)
         progressIndicator.visibility = View.VISIBLE
         taskListViewRef.visibility = View.GONE
+
         val tasks = arrayListOf<String>()
-        val adapter = ArrayAdapter(activity, android.R.layout.simple_list_item_multiple_choice, tasks)
-        taskListViewRef.choiceMode = ListView.CHOICE_MODE_MULTIPLE
+        val adapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, tasks)
         taskListViewRef.adapter = adapter
+
+        val editTxtDescription = view.findViewById<EditText>(R.id.editTxtDescription)
+        val addTaskBtnRef = view.findViewById<Button>(R.id.btnAdd)
+        val removeBtnRef = view.findViewById<Button>(R.id.btnRemove)
 
         logoutButtonRef.setOnClickListener {
             authViewModel.signOut()
@@ -62,12 +69,19 @@ class TasksFragment : Fragment() {
             startActivity(intent)
         }
 
+        addTaskBtnRef.setOnClickListener {
+            val description = editTxtDescription.text.toString()
+            val newTaskDto = NewTaskDto(description)
+            tasksViewModel.createTask(user.uid, newTaskDto)
+            editTxtDescription.text.clear()
+        }
+
         authViewModel.getUser().observe(activity) {
             if (it is UnauthenticatedAuthState) {
                 val intent = Intent(activity, LoginActivity::class.java)
                 startActivity(intent)
             } else if (it is SuccessAuthState) {
-                val user = it.user
+                user = it.user
                 tasksViewModel.fetchTasks(user.uid)
                 tasksViewModel.tasks().observe(activity) { tasksState ->
                     if (tasksState is SuccessTasksState) {

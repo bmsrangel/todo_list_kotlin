@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
+import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
 import br.com.bmsrangel.dev.todolist.app.modules.main.repositories.tasks.TasksRepository
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.ErrorTasksState
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
@@ -26,5 +27,12 @@ class TasksViewModel @Inject constructor(private val tasksRepository: TasksRepos
         }, {
             tasksLiveData.value = ErrorTasksState(it.message)
         })
+    }
+
+    fun removeSelectedTasks(userId: String, taskIdList: Array<String>) {
+        tasksRepository.removeSelectedTasks(userId, taskIdList)
+    }
+    fun createTask(userId: String, newTaskDto: NewTaskDto) {
+        tasksRepository.createNewTask(userId, newTaskDto)
     }
 }
