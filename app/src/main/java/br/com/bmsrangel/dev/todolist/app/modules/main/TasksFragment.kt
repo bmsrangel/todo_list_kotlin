@@ -8,19 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.UnauthenticatedAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
+import br.com.bmsrangel.dev.todolist.app.modules.main.adapters.TaskAdapter
 import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
+import br.com.bmsrangel.dev.todolist.app.modules.main.models.TaskModel
 import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.encodeToString
 
 @AndroidEntryPoint
 class TasksFragment : Fragment() {
@@ -56,8 +59,8 @@ class TasksFragment : Fragment() {
         progressIndicator.visibility = View.VISIBLE
         taskListViewRef.visibility = View.GONE
 
-        val tasks = arrayListOf<String>()
-        val adapter = ArrayAdapter(activity, android.R.layout.simple_list_item_1, tasks)
+        val tasks = arrayListOf<TaskModel>()
+        val adapter = TaskAdapter(activity, tasks)
         taskListViewRef.adapter = adapter
 
         val editTxtDescription = view.findViewById<EditText>(R.id.editTxtDescription)
@@ -89,12 +92,19 @@ class TasksFragment : Fragment() {
                 tasksViewModel.tasks().observe(activity) { tasksState ->
                     if (tasksState is SuccessTasksState) {
                         val taskList = tasksState.taskList
-                        val tasksDescriptions = taskList.map { task -> task.description }
                         tasks.clear()
-                        tasks.addAll(tasksDescriptions)
+                        tasks.addAll(taskList)
                         adapter.notifyDataSetChanged()
                         progressIndicator.visibility = View.GONE
                         taskListViewRef.visibility = View.VISIBLE
+
+                        taskListViewRef.setOnItemClickListener { parent, view, position, id ->
+                            val selectedTask = taskList[position]
+                            val intent = Intent(activity, SingleTaskActivity::class.java)
+                            val serializedTask = Json.encodeToString(selectedTask)
+                            intent.putExtra("task", serializedTask)
+                            startActivity(intent)
+                        }
                     }
                 }
 

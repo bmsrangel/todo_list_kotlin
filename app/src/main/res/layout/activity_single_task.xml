@@ -15,10 +15,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         >
-        <androidx.appcompat.widget.Toolbar
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/newTaskToolBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title="@string/newTaskTitleText" />
+            app:title="@string/newTaskTitleText"
+            app:navigationIcon="@drawable/baseline_arrow_back_24">
+
+        </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
@@ -31,17 +35,16 @@
         app:layout_constraintTop_toBottomOf="@id/newTaskAppBar"
         android:orientation="vertical">
         <EditText
-            android:id="@+id/editTextDescription"
+            android:id="@+id/editTxtDescription"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:hint="@string/newTaskDescriptionHintText"
             android:inputType="textCapSentences" />
         <EditText
-            android:id="@+id/editTextDate"
+            android:id="@+id/editTxtDate"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:hint="@string/newTaskDateHintText"
-            android:inputType="textCapSentences" />
+            android:hint="@string/newTaskDateHintText" />
 
         <Button
             android:layout_width="match_parent"
