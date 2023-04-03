@@ -45,80 +45,17 @@
             app:layout_constraintStart_toStartOf="parent"
             />
 
-        <LinearLayout
-            android:id="@+id/bodyLayout"
+        <ListView
+            android:id="@+id/todosList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBar"
-            android:layout_marginTop="60dp"
-            android:visibility="visible"
-            android:orientation="vertical">
-            <EditText
-                android:id="@+id/editTxtDescription"
-                android:hint="@string/descriptionHintText"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_marginHorizontal="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/bodyLayout"
-                android:inputType="text" />
-            <LinearLayout
-                android:id="@+id/buttonsLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTxtDescription"
-                app:layout_constraintBottom_toTopOf="@id/todosList"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginVertical="8dp">
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/appBar" />
 
-                <Button
-                    android:id="@+id/btnAdd"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/addButtonLabel"
-                    android:layout_weight="1"/>
-
-                <!--        Separator providing some space between buttons-->
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="0dp" />
-
-                <Button
-                    android:id="@+id/btnRemove"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/removeButtonLabel"
-                    android:layout_weight="1"/>
-
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="0dp" />
-
-                <Button
-                    android:id="@+id/btnClear"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/clearButtonLabel"
-                    android:layout_weight="1"/>
-            </LinearLayout>
-
-            <ListView
-                android:id="@+id/todosList"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/buttonsLayout" />
-
-        </LinearLayout>
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnNewTask"
             android:layout_width="wrap_content"

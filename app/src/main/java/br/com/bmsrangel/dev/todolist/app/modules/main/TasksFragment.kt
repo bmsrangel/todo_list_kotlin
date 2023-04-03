@@ -63,23 +63,12 @@ class TasksFragment : Fragment() {
         val adapter = TaskAdapter(activity, tasks)
         taskListViewRef.adapter = adapter
 
-        val editTxtDescription = view.findViewById<EditText>(R.id.editTxtDescription)
-        val addTaskBtnRef = view.findViewById<Button>(R.id.btnAdd)
-        val removeBtnRef = view.findViewById<Button>(R.id.btnRemove)
-
         logoutButtonRef.setOnClickListener {
             authViewModel.signOut()
             // TODO: Solve Google signout
             googleSignInClient.signOut()
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
-        }
-
-        addTaskBtnRef.setOnClickListener {
-            val description = editTxtDescription.text.toString()
-            val newTaskDto = NewTaskDto(description)
-            tasksViewModel.createTask(user.uid, newTaskDto)
-            editTxtDescription.text.clear()
         }
 
         authViewModel.getUser().observe(activity) {
@@ -98,7 +87,7 @@ class TasksFragment : Fragment() {
                         progressIndicator.visibility = View.GONE
                         taskListViewRef.visibility = View.VISIBLE
 
-                        taskListViewRef.setOnItemClickListener { parent, view, position, id ->
+                        taskListViewRef.setOnItemClickListener { _, _, position, _ ->
                             val selectedTask = taskList[position]
                             val intent = Intent(activity, SingleTaskActivity::class.java)
                             val serializedTask = Json.encodeToString(selectedTask)
