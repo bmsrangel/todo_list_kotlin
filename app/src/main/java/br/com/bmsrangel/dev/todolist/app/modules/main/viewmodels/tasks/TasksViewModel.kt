@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist.app.modules.main
+package br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
 import br.com.bmsrangel.dev.todolist.app.modules.main.repositories.tasks.TasksRepository
-import br.com.bmsrangel.dev.todolist.app.modules.main.states.ErrorTasksState
-import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
-import br.com.bmsrangel.dev.todolist.app.modules.main.states.TasksState
+import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.states.ErrorTasksState
+import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.states.SuccessTasksState
+import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.states.TasksState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

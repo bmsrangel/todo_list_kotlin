@@ -21,7 +21,7 @@ class FirebaseTasksRepositoryImpl @Inject constructor(private val db: FirebaseDa
                     val tasks = snapshot.children.map { dataSnapshot ->
                         val id = dataSnapshot.key
                         val data = dataSnapshot.value as HashMap<*, *>
-                        TaskModel(id!!, data["description"].toString())
+                        TaskModel(id!!, data["description"].toString(), data["due_date"].toString())
                     }
                     tasksLiveData.value = tasks.toTypedArray()
                     /* Snapshot format:
@@ -56,8 +56,14 @@ class FirebaseTasksRepositoryImpl @Inject constructor(private val db: FirebaseDa
     override fun createNewTask(userId: String, newTask: NewTaskDto) {
         val dbRef = db.reference.child("users/$userId/tasks")
         val newTaskRef = dbRef.push()
-        newTaskRef.setValue(hashMapOf(
-            Pair("description", newTask.description)
+        newTaskRef.setValue(newTask.toMap())
+    }
+
+    override fun updateTask(userId: String, task: TaskModel) {
+        val dbRef = db.reference.child("users/$userId/tasks/${task.id}")
+        dbRef.setValue(hashMapOf<String, Any>(
+            Pair("description", task.description),
+            Pair("due_date", task.dueDate)
         ))
     }
 }

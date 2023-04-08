@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist.app.core.viewmodels.states
+package br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states
 
 import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 

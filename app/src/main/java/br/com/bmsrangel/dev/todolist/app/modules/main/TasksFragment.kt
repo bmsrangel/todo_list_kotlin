@@ -10,14 +10,14 @@ import android.widget.*
 import androidx.fragment.app.viewModels
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.UnauthenticatedAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.UnauthenticatedAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
 import br.com.bmsrangel.dev.todolist.app.modules.main.adapters.TaskAdapter
-import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
 import br.com.bmsrangel.dev.todolist.app.modules.main.models.TaskModel
-import br.com.bmsrangel.dev.todolist.app.modules.main.states.SuccessTasksState
+import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.states.SuccessTasksState
+import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.TasksViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -92,6 +92,7 @@ class TasksFragment : Fragment() {
                             val intent = Intent(activity, SingleTaskActivity::class.java)
                             val serializedTask = Json.encodeToString(selectedTask)
                             intent.putExtra("task", serializedTask)
+                            intent.putExtra("userId", user.uid)
                             startActivity(intent)
                         }
                     }
@@ -101,6 +102,7 @@ class TasksFragment : Fragment() {
         }
         newTaskButtonRef.setOnClickListener {
             val intent = Intent(activity, SingleTaskActivity::class.java)
+            intent.putExtra("userId", user.uid)
             startActivity(intent)
         }
         return view

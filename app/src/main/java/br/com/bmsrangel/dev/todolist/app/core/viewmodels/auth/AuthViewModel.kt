@@ -1,15 +1,11 @@
-package br.com.bmsrangel.dev.todolist.app.core.viewmodels
+package br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth
 
-import android.annotation.SuppressLint
-import android.os.Build.VERSION_CODES.P
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.CreationExtras
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
-import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.modules.auth.repositories.auth.AuthRepository
 import br.com.bmsrangel.dev.todolist.app.core.services.user.UserService
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.*
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

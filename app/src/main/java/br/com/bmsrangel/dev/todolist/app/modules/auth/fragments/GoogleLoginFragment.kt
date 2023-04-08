@@ -14,9 +14,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.AuthViewModel
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.ErrorAuthState
-import br.com.bmsrangel.dev.todolist.app.core.viewmodels.states.SuccessAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

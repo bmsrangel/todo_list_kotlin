@@ -26,6 +26,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        android:id="@+id/datePickerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
@@ -40,16 +41,38 @@
             android:layout_height="48dp"
             android:hint="@string/newTaskDescriptionHintText"
             android:inputType="textCapSentences" />
-        <EditText
-            android:id="@+id/editTxtDate"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:hint="@string/newTaskDateHintText" />
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTxtDescription"
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/editTxtDate"
+                android:layout_width="0dp"
+                android:layout_weight="0.6"
+                android:layout_height="48dp"
+                android:inputType="date"
+                android:hint="@string/newTaskDateHintText"
+                android:enabled="false" />
+            <Button
+                android:id="@+id/btnSelectDate"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/dateButtonText"/>
+        </LinearLayout>
 
         <Button
+            android:id="@+id/btnSaveTask"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/datePickerLayout"
             android:text="@string/btnSaveText" />
     </LinearLayout>
 

@@ -8,4 +8,5 @@ interface TasksRepository {
     fun getTasksByUserId(userId: String): Result<LiveData<Array<TaskModel>>>
     fun removeSelectedTasks(userId: String, taskIdList: Array<String>)
     fun createNewTask(userId: String, newTask: NewTaskDto)
+    fun updateTask(userId: String, task: TaskModel)
 }

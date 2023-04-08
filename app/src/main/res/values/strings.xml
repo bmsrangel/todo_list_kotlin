@@ -36,4 +36,6 @@
     <string name="newTaskTitleText">Nova Tarefa</string>
     <string name="newTaskDateHintText">Data</string>
     <string name="btnSaveText">Salvar</string>
+    <string name="updateTaskText">Atualizar tarefa</string>
+    <string name="dateButtonText">Data</string>
 </resources>
