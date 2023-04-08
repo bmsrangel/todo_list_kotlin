@@ -21,12 +21,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private val PERMISSION_REQUEST_CAMERA = 0
     private val PERMISSON_REQUEST_READ_EXTERNAL_STORAGE = 1
@@ -48,10 +51,30 @@ class ProfileFragment : Fragment() {
     ): View {
         activity = requireActivity()
         view = inflater.inflate(R.layout.fragment_profile, container, false)
+        val googleSignOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        val googleSignInClient = GoogleSignIn.getClient(activity, googleSignOptions)
+
         val cameraButtonRef = view.findViewById<FloatingActionButton>(R.id.fabCamera)
         val galleryButtonRef = view.findViewById<FloatingActionButton>(R.id.fabGallery)
-        val updateButtonRef = view.findViewById<Button>(R.id.btnUpdateProfile)
-        val logoutButtonRef = view.findViewById<Button>(R.id.btnProfileLogout)
+
+        val updateProfileButtonRef = CustomButtonFragment()
+        updateProfileButtonRef.buttonText = getString(R.string.profileUpdateButtonText)
+        updateProfileButtonRef.onClick = {saveProfile()}
+        childFragmentManager.beginTransaction().replace(R.id.updateProfileBtnFragment, updateProfileButtonRef).commit()
+
+        val logoutButtonRef = CustomButtonFragment()
+        logoutButtonRef.buttonText = getString(R.string.profileLogoutButtonText)
+        logoutButtonRef.onClick = {
+            firebaseAuth.signOut()
+            googleSignInClient.signOut()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+        childFragmentManager.beginTransaction().replace(R.id.logoutBtnFragment, logoutButtonRef).commit()
 
         val emailEditTxtRef = view.findViewById<EditText>(R.id.editTextProfileEmailAddress)
         val firstNameEditTextRef = view.findViewById<EditText>(R.id.editTextFirstName)
@@ -59,12 +82,6 @@ class ProfileFragment : Fragment() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        val googleSignOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(activity, googleSignOptions)
 
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
@@ -102,17 +119,6 @@ class ProfileFragment : Fragment() {
             ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSON_REQUEST_READ_EXTERNAL_STORAGE)
         }
 
-        updateButtonRef.setOnClickListener {
-            saveProfile()
-        }
-
-        logoutButtonRef.setOnClickListener {
-            firebaseAuth.signOut()
-            googleSignInClient.signOut()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-        }
-        // Inflate the layout for this fragment
         return view
     }
 
@@ -165,5 +171,4 @@ class ProfileFragment : Fragment() {
     private fun saveProfile() {}
 
     private fun saveLocalFile() {}
-
 }

@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:backgroundTint="@android:color/holo_red_dark"
-        android:text="@string/googleLoginButtonText" />
+        android:backgroundTint="@android:color/holo_red_dark" />
 
 </FrameLayout>

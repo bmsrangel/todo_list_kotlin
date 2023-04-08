@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
+            android:id="@+id/registerAppBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -32,7 +32,7 @@
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/appBar">
+            app:layout_constraintTop_toBottomOf="@+id/registerAppBar">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profileImage"
@@ -104,18 +104,30 @@
                     android:hint="@string/lastNameHintText"
                     android:inputType="textPersonName"
                     android:importantForAutofill="no"/>
-                <Button
-                    android:id="@+id/btnUpdateProfile"
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/updateProfileBtnFragment"
+                    android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="@string/profileUpdateButtonText"/>
-                <Button
-                    android:id="@+id/btnProfileLogout"
+                    app:layout_constraintBottom_toTopOf="@id/editTextLastName"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/parent"
+                    app:layout_constraintTop_toBottomOf="@+id/btnProfileLogout"
+                    tools:layout="@layout/fragment_custom_button" />
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/logoutBtnFragment"
+                    android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="@string/profileLogoutButtonText"/>
+                    app:layout_constraintBottom_toTopOf="@id/updateProfileBtnFragment"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/parent"
+                    app:layout_constraintTop_toBottomOf="parent"
+                    tools:layout="@layout/fragment_custom_button" />
+
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

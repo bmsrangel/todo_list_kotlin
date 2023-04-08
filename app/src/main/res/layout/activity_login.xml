@@ -7,7 +7,7 @@
     tools:context=".app.modules.auth.LoginActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
+        android:id="@+id/registerAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -35,7 +35,7 @@
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBar" />
+        app:layout_constraintTop_toBottomOf="@+id/registerAppBar" />
 
     <EditText
         android:id="@+id/editTextLoginPassword"
@@ -51,30 +51,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextLoginEmailAddress" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:backgroundTint="?attr/colorPrimary"
-        android:layout_width="0dp"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/loginBtnFragment"
+        android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/loginButtonText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword"
+        tools:layout="@layout/fragment_custom_button" />
 
-    <fragment
+<!--    <Button-->
+<!--        android:id="@+id/btnLogin"-->
+<!--        android:backgroundTint="?attr/colorPrimary"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginTop="32dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:text="@string/loginButtonText"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/editTextLoginPassword" />-->
+
+    <TextView
+        android:id="@+id/orText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/orText"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/googleLoginFragment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textAlignment="center"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtnFragment"/>
+
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/googleLoginFragment"
-        class="br.com.bmsrangel.dev.todolist.app.modules.auth.fragments.GoogleLoginFragment"
+        android:name="br.com.bmsrangel.dev.todolist.app.modules.auth.fragments.GoogleLoginFragment"
         tools:layout="@layout/fragment_google_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/orText" />
 
     <TextView
         android:id="@+id/noAccountText"

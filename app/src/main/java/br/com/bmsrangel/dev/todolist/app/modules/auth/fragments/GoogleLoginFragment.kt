@@ -30,6 +30,7 @@ class GoogleLoginFragment : Fragment() {
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var activity: FragmentActivity
     private val authViewModel: AuthViewModel by viewModels()
+    var buttonText: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +46,7 @@ class GoogleLoginFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_google_login, container, false)
 
         val googleLoginButtonRef = view.findViewById<Button>(R.id.btnGoogleLogin)
+        googleLoginButtonRef.text = buttonText
         googleLoginButtonRef.setOnClickListener {
             signInGoogle()
         }

@@ -7,12 +7,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
+import br.com.bmsrangel.dev.todolist.app.modules.auth.fragments.GoogleLoginFragment
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,17 +30,16 @@ class LoginActivity : AppCompatActivity() {
         val editTxtEmail = findViewById<EditText>(R.id.editTextLoginEmailAddress)
         val editTxtPassword = findViewById<EditText>(R.id.editTextLoginPassword)
 
-        val loginButtonRef = findViewById<Button>(R.id.btnLogin)
-        val registerButtonRef = findViewById<Button>(R.id.btnRegister)
-
-        loginButtonRef.setOnClickListener {
+        val loginButtonRef = CustomButtonFragment()
+        loginButtonRef.buttonText = getString(R.string.loginButtonText)
+        loginButtonRef.onClick = {
             val email = editTxtEmail.text.toString()
             val password = editTxtPassword.text.toString()
 
             val loginDTO = LoginDTO(email, password)
             authViewModel.login(loginDTO)
 
-            authViewModel.getUser().observe(this, Observer {
+            authViewModel.getUser().observe(this) {
                 if (it is SuccessAuthState) {
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
@@ -47,8 +47,14 @@ class LoginActivity : AppCompatActivity() {
                 } else if (it is ErrorAuthState) {
                     Toast.makeText(this, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
                 }
-            })
+            }
         }
+        supportFragmentManager.beginTransaction().replace(R.id.loginBtnFragment, loginButtonRef).commit()
+
+        val registerButtonRef = findViewById<Button>(R.id.btnRegister)
+        val googleLoginButtonRef = GoogleLoginFragment()
+        googleLoginButtonRef.buttonText = getString(R.string.googleLoginButtonText)
+        supportFragmentManager.beginTransaction().replace(R.id.googleLoginFragment, googleLoginButtonRef).commit()
 
         registerButtonRef.setOnClickListener {
             val intent = Intent(this, RegisterActivity::class.java)

@@ -38,4 +38,6 @@
     <string name="btnSaveText">Salvar</string>
     <string name="updateTaskText">Atualizar tarefa</string>
     <string name="dateButtonText">Data</string>
+    <string name="googleRegisterButtonText">Registrar com Google</string>
+    <string name="orText">OU</string>
 </resources>

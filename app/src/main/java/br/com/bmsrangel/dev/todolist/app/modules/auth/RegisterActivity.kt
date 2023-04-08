@@ -10,10 +10,13 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
+import br.com.bmsrangel.dev.todolist.app.modules.auth.fragments.GoogleLoginFragment
+import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,9 +32,18 @@ class RegisterActivity : AppCompatActivity() {
         val editTxtEmail = findViewById<EditText>(R.id.editTextEmailAddress)
         val editTxtPassword = findViewById<EditText>(R.id.editTextPassword)
         val editTxtConfirmPassword = findViewById<EditText>(R.id.editTextConfirmPassword)
+        val toolBarRef = findViewById<MaterialToolbar>(R.id.registerToolBar)
+        val googleLoginBtnRef = GoogleLoginFragment()
+        googleLoginBtnRef.buttonText = getString(R.string.googleRegisterButtonText)
+        supportFragmentManager.beginTransaction().replace(R.id.googleLoginFragment, googleLoginBtnRef).commit()
 
-        val btnCreateAccount = findViewById<Button>(R.id.btnCreateAccount)
-        btnCreateAccount.setOnClickListener {
+        toolBarRef.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        val btnCreateAccount = CustomButtonFragment()
+        btnCreateAccount.buttonText = getString(R.string.createAccountButtonText)
+        btnCreateAccount.onClick = {
             val name = editTxtName.text.toString()
             val email = editTxtEmail.text.toString()
             val password = editTxtPassword.text.toString()
@@ -52,5 +64,6 @@ class RegisterActivity : AppCompatActivity() {
                 Toast.makeText(baseContext, R.string.passwordMismatchError, Toast.LENGTH_SHORT).show()
             }
         }
+        supportFragmentManager.beginTransaction().replace(R.id.createAccountBtnFragment, btnCreateAccount).commit()
     }
 }
