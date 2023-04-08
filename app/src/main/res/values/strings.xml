@@ -40,4 +40,10 @@
     <string name="dateButtonText">Data</string>
     <string name="googleRegisterButtonText">Registrar com Google</string>
     <string name="orText">OU</string>
+    <string name="mandatoryEmailErrorText">Campo obrigatório</string>
+    <string name="invalidEmailErrorText">E-mail inválido</string>
+    <string name="weakPasswordText">Senha Fraca</string>
+    <string name="mediumPasswordText">Senha Média</string>
+    <string name="strongPasswordText">Senha Forte</string>
+    <string name="veryStrongPasswordText">Senha Muito Forte</string>
 </resources>

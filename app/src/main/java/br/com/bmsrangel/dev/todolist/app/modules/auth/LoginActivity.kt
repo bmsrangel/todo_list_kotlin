@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
+import br.com.bmsrangel.dev.todolist.app.core.components.EmailEditTextFragment
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState
@@ -27,25 +28,28 @@ class LoginActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        val editTxtEmail = findViewById<EditText>(R.id.editTextLoginEmailAddress)
+        val editTxtEmail = EmailEditTextFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.editTextEmailFragment, editTxtEmail).commit()
         val editTxtPassword = findViewById<EditText>(R.id.editTextLoginPassword)
 
         val loginButtonRef = CustomButtonFragment()
         loginButtonRef.buttonText = getString(R.string.loginButtonText)
         loginButtonRef.onClick = {
-            val email = editTxtEmail.text.toString()
+            val email = editTxtEmail.getText()
             val password = editTxtPassword.text.toString()
 
-            val loginDTO = LoginDTO(email, password)
-            authViewModel.login(loginDTO)
+            if (editTxtEmail.validate()) {
+                val loginDTO = LoginDTO(email, password)
+                authViewModel.login(loginDTO)
 
-            authViewModel.getUser().observe(this) {
-                if (it is SuccessAuthState) {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                } else if (it is ErrorAuthState) {
-                    Toast.makeText(this, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
+                authViewModel.getUser().observe(this) {
+                    if (it is SuccessAuthState) {
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else if (it is ErrorAuthState) {
+                        Toast.makeText(this, R.string.loginFailedError, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
