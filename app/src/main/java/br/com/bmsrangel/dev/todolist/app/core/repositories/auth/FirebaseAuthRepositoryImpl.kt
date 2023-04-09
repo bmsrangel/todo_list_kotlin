@@ -46,8 +46,8 @@ class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: F
         }
     }
 
-    override suspend fun resetPassword(email: String): Void {
-        TODO("Not yet implemented")
+    override suspend fun resetPassword(email: String) {
+        firebaseAuth.sendPasswordResetEmail(email).await()
     }
 
     override suspend fun signInWithGoogle(accountIdToken: String): Result<UserModel> {

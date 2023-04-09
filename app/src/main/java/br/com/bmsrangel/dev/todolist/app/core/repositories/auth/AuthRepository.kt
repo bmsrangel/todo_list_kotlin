@@ -9,7 +9,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 interface AuthRepository {
     suspend fun login(loginDTO: LoginDTO): Result<UserModel>
     suspend fun register(registerDTO: RegisterDTO): Result<UserModel>
-    suspend fun resetPassword(email: String): Void
+    suspend fun resetPassword(email: String)
     suspend fun signInWithGoogle(accountIdToken: String): Result<UserModel>
     fun signOut()
     suspend fun updatePassword(newPassword: String): Result<Boolean>

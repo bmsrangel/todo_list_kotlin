@@ -20,9 +20,13 @@
         android:theme="@style/Theme.TodoList"
         tools:targetApi="31">
         <activity
+            android:name=".app.modules.auth.ForgotPasswordActivity"
+            android:exported="false"
+            android:parentActivityName=".app.modules.auth.LoginActivity" />
+        <activity
             android:name=".app.modules.profile.UpdatePasswordActivity"
             android:exported="false"
-            android:parentActivityName=".app.modules.main.MainActivity"/>
+            android:parentActivityName=".app.modules.main.MainActivity" />
         <activity
             android:name=".app.modules.main.SingleTaskActivity"
             android:exported="false"

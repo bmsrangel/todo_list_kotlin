@@ -31,6 +31,11 @@ class LoginActivity : AppCompatActivity() {
         val editTxtEmail = EmailEditTextFragment()
         supportFragmentManager.beginTransaction().replace(R.id.editTextEmailFragment, editTxtEmail).commit()
         val editTxtPassword = findViewById<EditText>(R.id.editTextLoginPassword)
+        val forgotPasswordBtnRef = findViewById<Button>(R.id.forgotPasswordBtn)
+        forgotPasswordBtnRef.setOnClickListener {
+            val intent = Intent(this, ForgotPasswordActivity::class.java)
+            startActivity(intent)
+        }
 
         val loginButtonRef = CustomButtonFragment()
         loginButtonRef.buttonText = getString(R.string.loginButtonText)

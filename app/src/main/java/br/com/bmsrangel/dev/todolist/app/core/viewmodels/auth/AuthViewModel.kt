@@ -95,4 +95,10 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
             })
         }
     }
+
+    fun sendForgotPasswordEmail(email: String) {
+        viewModelScope.launch {
+            authRepository.resetPassword(email)
+        }
+    }
 }

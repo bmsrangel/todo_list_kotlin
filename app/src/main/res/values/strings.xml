@@ -7,7 +7,6 @@
     <string name="emailHintText">E-mail</string>
     <string name="passwordHintText">Senha</string>
     <string name="confirmPasswordHintText">Confirmar senha</string>
-    <string name="forgotPasswordButtonText">Esqueci minha senha</string>
     <string name="loginButtonText">Entrar</string>
     <string name="googleLoginButtonText">Entrar com Google</string>
     <string name="registerButtonText">Registre-se!</string>
@@ -49,4 +48,8 @@
     <string name="changePasswordButtonText">Alterar Senha</string>
     <string name="updatePasswordText">Atualizar Senha</string>
     <string name="passwordUpdateErrorText">Falha ao atualizar senha</string>
+    <string name="forgotPasswordBtnText">Esqueci minha senha</string>
+    <string name="forgotPasswordToolbarText">Esqueci minha Senha</string>
+    <string name="forgotPasswordInstructions">Enviaremos um e-mail com instruções para alterar sua senha para o endereço informado no campo abaixo.</string>
+    <string name="sendEmailBtnText">Enviar E-mail</string>
 </resources>
