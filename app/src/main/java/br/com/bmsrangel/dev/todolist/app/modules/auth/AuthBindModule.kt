@@ -1,7 +1,7 @@
 package br.com.bmsrangel.dev.todolist.app.modules.auth
 
-import br.com.bmsrangel.dev.todolist.app.modules.auth.repositories.auth.AuthRepository
-import br.com.bmsrangel.dev.todolist.app.modules.auth.repositories.auth.FirebaseAuthRepositoryImpl
+import br.com.bmsrangel.dev.todolist.app.core.repositories.auth.AuthRepository
+import br.com.bmsrangel.dev.todolist.app.core.repositories.auth.FirebaseAuthRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

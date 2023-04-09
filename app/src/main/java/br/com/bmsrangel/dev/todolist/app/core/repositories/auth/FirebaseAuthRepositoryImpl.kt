@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist.app.modules.auth.repositories.auth
+package br.com.bmsrangel.dev.todolist.app.core.repositories.auth
 
 import android.content.Intent
 import android.widget.Toast
@@ -18,7 +18,8 @@ import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: FirebaseAuth) : AuthRepository {
+class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: FirebaseAuth) :
+    AuthRepository {
     override suspend fun login(loginDTO: LoginDTO): Result<UserModel> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(loginDTO.email, loginDTO.password).await()
@@ -63,5 +64,14 @@ class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: F
 
     override fun signOut() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun updatePassword(newPassword: String): Result<Boolean> {
+        return try {
+            firebaseAuth.currentUser!!.updatePassword(newPassword).await()
+            return Result.success(true)
+        } catch (e: java.lang.Exception) {
+            Result.failure(e)
+        }
     }
 }

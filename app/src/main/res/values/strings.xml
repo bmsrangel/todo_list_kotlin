@@ -46,4 +46,7 @@
     <string name="mediumPasswordText">Senha Média</string>
     <string name="strongPasswordText">Senha Forte</string>
     <string name="veryStrongPasswordText">Senha Muito Forte</string>
+    <string name="changePasswordButtonText">Alterar Senha</string>
+    <string name="updatePasswordText">Atualizar Senha</string>
+    <string name="passwordUpdateErrorText">Falha ao atualizar senha</string>
 </resources>

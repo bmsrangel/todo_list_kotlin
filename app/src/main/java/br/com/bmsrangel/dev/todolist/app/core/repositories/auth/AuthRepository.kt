@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist.app.modules.auth.repositories.auth
+package br.com.bmsrangel.dev.todolist.app.core.repositories.auth
 
 import androidx.lifecycle.LiveData
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
@@ -12,4 +12,5 @@ interface AuthRepository {
     suspend fun resetPassword(email: String): Void
     suspend fun signInWithGoogle(accountIdToken: String): Result<UserModel>
     fun signOut()
+    suspend fun updatePassword(newPassword: String): Result<Boolean>
 }

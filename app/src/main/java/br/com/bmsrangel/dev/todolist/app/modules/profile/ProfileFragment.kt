@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
@@ -65,6 +64,14 @@ class ProfileFragment : Fragment() {
         updateProfileButtonRef.buttonText = getString(R.string.profileUpdateButtonText)
         updateProfileButtonRef.onClick = {saveProfile()}
         childFragmentManager.beginTransaction().replace(R.id.updateProfileBtnFragment, updateProfileButtonRef).commit()
+
+        val updatePasswordButtonRef = CustomButtonFragment()
+        updatePasswordButtonRef.buttonText = getString(R.string.changePasswordButtonText)
+        updatePasswordButtonRef.onClick = {
+            val intent = Intent(activity, UpdatePasswordActivity::class.java)
+            startActivity(intent)
+        }
+        childFragmentManager.beginTransaction().replace(R.id.updatePasswordBtnFragment, updatePasswordButtonRef).commit()
 
         val logoutButtonRef = CustomButtonFragment()
         logoutButtonRef.buttonText = getString(R.string.profileLogoutButtonText)

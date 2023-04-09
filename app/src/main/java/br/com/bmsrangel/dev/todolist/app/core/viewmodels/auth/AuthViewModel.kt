@@ -3,7 +3,7 @@ package br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth
 import androidx.lifecycle.*
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
-import br.com.bmsrangel.dev.todolist.app.modules.auth.repositories.auth.AuthRepository
+import br.com.bmsrangel.dev.todolist.app.core.repositories.auth.AuthRepository
 import br.com.bmsrangel.dev.todolist.app.core.services.user.UserService
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -79,5 +79,20 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
 
     fun signOut() {
         authRepository.signOut()
+    }
+
+    fun updatePassword(newPassword: String) {
+        userLiveData.value = LoadingAuthState()
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.updatePassword(newPassword)
+            }
+            result.fold({
+                userLiveData.value = PasswordUpdateSuccessAuthState()
+            }, {
+                userLiveData.value = ErrorAuthState(it.message)
+                userLiveData.value = InitialState()
+            })
+        }
     }
 }
