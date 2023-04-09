@@ -26,6 +26,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,6 +51,10 @@ class ProfileFragment : Fragment() {
     ): View {
         activity = requireActivity()
         view = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        val emailEditTxtRef = view.findViewById<EditText>(R.id.editTextProfileEmailAddress)
+        val nameEditTextRef = view.findViewById<EditText>(R.id.editTextProfileName)
+
         val googleSignOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.default_web_client_id))
             .requestEmail()
@@ -62,7 +67,10 @@ class ProfileFragment : Fragment() {
 
         val updateProfileButtonRef = CustomButtonFragment()
         updateProfileButtonRef.buttonText = getString(R.string.profileUpdateButtonText)
-        updateProfileButtonRef.onClick = {saveProfile()}
+        updateProfileButtonRef.onClick = {
+            saveProfile(nameEditTextRef.text.toString())
+            nameEditTextRef.clearFocus()
+        }
         childFragmentManager.beginTransaction().replace(R.id.updateProfileBtnFragment, updateProfileButtonRef).commit()
 
         val updatePasswordButtonRef = CustomButtonFragment()
@@ -83,9 +91,7 @@ class ProfileFragment : Fragment() {
         }
         childFragmentManager.beginTransaction().replace(R.id.logoutBtnFragment, logoutButtonRef).commit()
 
-        val emailEditTxtRef = view.findViewById<EditText>(R.id.editTextProfileEmailAddress)
-        val firstNameEditTextRef = view.findViewById<EditText>(R.id.editTextFirstName)
-        val lastNameEditTextRef = view.findViewById<EditText>(R.id.editTextLastName)
+
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -98,12 +104,8 @@ class ProfileFragment : Fragment() {
 
             val splittedName = displayName?.split(" ")
             // TODO: Verify if the display name contains in fact 2 names; change to handle the case where there's just first name
-            val firstName = splittedName?.first()
-            val lastName = splittedName?.last()
-
             emailEditTxtRef.setText(email)
-            firstNameEditTextRef.setText(firstName)
-            lastNameEditTextRef.setText(lastName)
+            nameEditTextRef.setText(displayName)
         }
 
         cameraButtonRef.setOnClickListener {
@@ -175,7 +177,12 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun saveProfile() {}
+    private fun saveProfile(name: String) {
+        val changeRequest = userProfileChangeRequest {
+            displayName = name
+        }
+        firebaseAuth.currentUser?.updateProfile(changeRequest)
+    }
 
     private fun saveLocalFile() {}
 }

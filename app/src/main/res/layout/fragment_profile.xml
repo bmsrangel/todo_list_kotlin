@@ -89,19 +89,11 @@
                     android:inputType="textEmailAddress"
                     android:importantForAutofill="no"/>
                 <EditText
-                    android:id="@+id/editTextFirstName"
+                    android:id="@+id/editTextProfileName"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_marginTop="8dp"
                     android:hint="@string/nameHintText"
-                    android:inputType="textPersonName"
-                    android:importantForAutofill="no"/>
-                <EditText
-                    android:id="@+id/editTextLastName"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="8dp"
-                    android:hint="@string/lastNameHintText"
                     android:inputType="textPersonName"
                     android:importantForAutofill="no"/>
                 <androidx.fragment.app.FragmentContainerView
@@ -110,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    app:layout_constraintBottom_toTopOf="@id/editTextLastName"
+                    app:layout_constraintBottom_toTopOf="@id/editTextProfileName"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/parent"
                     app:layout_constraintTop_toBottomOf="@+id/btnProfileLogout"

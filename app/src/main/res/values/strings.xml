@@ -16,18 +16,14 @@
     <string name="registerAppBarTitle">Criar Conta</string>
     <string name="homeAppBarTitle">Lista de Tarefas</string>
     <string name="profileAppBarTitle">Perfil</string>
-
     <string name="passwordMismatchError">As senhas não coincidem</string>
     <string name="userRegistrationFailedError">Falha ao criar usuário</string>
     <string name="loginFailedError">"Falha ao efetuar login"</string>
     <string name="homeButtonDescription">Tela inicial</string>
     <string name="nameHintText">Nome</string>
-    <string name="lastNameHintText">Sobrenome</string>
     <string name="profileUpdateButtonText">Atualizar Perfil</string>
     <string name="cameraFABDescription">Carregar imagem da câmera</string>
     <string name="profileLogoutButtonText">Sair da conta</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="navTasksTitle">Tarefas</string>
     <string name="navProfileTitle">Perfil</string>
     <string name="galleryFabDescription">Carregar imagem da galeria</string>
@@ -50,6 +46,6 @@
     <string name="passwordUpdateErrorText">Falha ao atualizar senha</string>
     <string name="forgotPasswordBtnText">Esqueci minha senha</string>
     <string name="forgotPasswordToolbarText">Esqueci minha Senha</string>
-    <string name="forgotPasswordInstructions">Enviaremos um e-mail com instruções para alterar sua senha para o endereço informado no campo abaixo.</string>
+    <string name="forgotPasswordInstructions">Enviaremos um e-mail com instruções para redefinir sua senha para o endereço informado no campo abaixo.</string>
     <string name="sendEmailBtnText">Enviar E-mail</string>
 </resources>
