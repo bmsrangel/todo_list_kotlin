@@ -4,8 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
-import br.com.bmsrangel.dev.todolist.app.core.components.EmailEditTextFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.EmailEditTextFragment
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint

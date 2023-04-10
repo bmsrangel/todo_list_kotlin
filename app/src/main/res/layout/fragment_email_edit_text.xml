@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".app.core.components.EmailEditTextFragment">
+    tools:context=".app.core.fragments.EmailEditTextFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

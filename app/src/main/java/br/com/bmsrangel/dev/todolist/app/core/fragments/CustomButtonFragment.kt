@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist.app.core.components
+package br.com.bmsrangel.dev.todolist.app.core.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

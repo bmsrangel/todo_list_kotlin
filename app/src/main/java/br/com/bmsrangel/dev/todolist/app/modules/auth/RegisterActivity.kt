@@ -9,9 +9,9 @@ import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
-import br.com.bmsrangel.dev.todolist.app.core.components.EmailEditTextFragment
-import br.com.bmsrangel.dev.todolist.app.core.components.PasswordEditTextFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.EmailEditTextFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.PasswordEditTextFragment
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState

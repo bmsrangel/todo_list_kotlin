@@ -25,7 +25,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/editTextEmailFragment"
-        android:name="br.com.bmsrangel.dev.todolist.app.core.components.EmailEditTextFragment"
+        android:name="br.com.bmsrangel.dev.todolist.app.core.fragments.EmailEditTextFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -65,7 +65,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/loginBtnFragment"
-        android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
+        android:name="br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"

@@ -23,25 +23,25 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
     fun getUserFromLocalStorage() {
         val user = userService.getUser()
         if (user != null) {
-            userLiveData.value = SuccessAuthState(user)
+            userLiveData.postValue(SuccessAuthState(user))
         } else {
-            userLiveData.value = UnauthenticatedAuthState()
+            userLiveData.postValue(UnauthenticatedAuthState())
         }
 
     }
 
     fun login(loginDTO: LoginDTO) {
-        userLiveData.value = (LoadingAuthState())
+        userLiveData.postValue(LoadingAuthState())
 
         viewModelScope.launch {
             val result = withContext(Dispatchers.IO) {
                 authRepository.login(loginDTO)
             }
             result.fold({
-                userLiveData.value = (SuccessAuthState(it))
+                userLiveData.postValue(SuccessAuthState(it))
             }, {
-                userLiveData.value = ErrorAuthState(it.message)
-                userLiveData.value = InitialState()
+                userLiveData.postValue(ErrorAuthState(it.message))
+                userLiveData.postValue(InitialState())
             })
         }
 

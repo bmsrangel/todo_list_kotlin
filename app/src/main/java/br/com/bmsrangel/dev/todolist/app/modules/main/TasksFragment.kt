@@ -71,7 +71,7 @@ class TasksFragment : Fragment() {
             startActivity(intent)
         }
 
-        authViewModel.getUser().observe(activity) {
+        authViewModel.getUser().observe(requireActivity()) {
             if (it is UnauthenticatedAuthState) {
                 val intent = Intent(activity, LoginActivity::class.java)
                 startActivity(intent)

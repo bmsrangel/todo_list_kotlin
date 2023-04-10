@@ -8,8 +8,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
-import br.com.bmsrangel.dev.todolist.app.core.components.EmailEditTextFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.EmailEditTextFragment
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState

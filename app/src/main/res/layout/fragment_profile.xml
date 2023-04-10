@@ -98,7 +98,7 @@
                     android:importantForAutofill="no"/>
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/updateProfileBtnFragment"
-                    android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
+                    android:name="br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
@@ -110,7 +110,7 @@
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/updatePasswordBtnFragment"
-                    android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
+                    android:name="br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:layout="@layout/fragment_custom_button"
@@ -121,7 +121,7 @@
 
                 <androidx.fragment.app.FragmentContainerView
                     android:id="@+id/logoutBtnFragment"
-                    android:name="br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment"
+                    android:name="br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"

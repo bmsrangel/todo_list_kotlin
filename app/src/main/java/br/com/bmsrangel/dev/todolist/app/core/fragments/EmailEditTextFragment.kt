@@ -1,4 +1,4 @@
-package br.com.bmsrangel.dev.todolist.app.core.components
+package br.com.bmsrangel.dev.todolist.app.core.fragments
 
 import android.content.res.ColorStateList
 import android.os.Bundle

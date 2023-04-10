@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.core.components.CustomButtonFragment
-import br.com.bmsrangel.dev.todolist.app.core.components.PasswordEditTextFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment
+import br.com.bmsrangel.dev.todolist.app.core.fragments.PasswordEditTextFragment
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.ErrorAuthState
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.PasswordUpdateSuccessAuthState
