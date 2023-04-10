@@ -49,4 +49,8 @@
     <string name="forgotPasswordToolbarText">Forgot My Password</string>
     <string name="forgotPasswordInstructions">We will send you an e-mail with instructions to reset your password to the address informed below.</string>
     <string name="sendEmailBtnText">Send E-mail</string>
+    <string name="cameraPermissionGrantedText">Camera permission granted</string>
+    <string name="cameraPermissionDeniedText">Camera permission denied</string>
+    <string name="galleryPermissionGrantedText">Gallery permission granted</string>
+    <string name="galleryPermissionDeniedText">Gallery permission denied</string>
 </resources>

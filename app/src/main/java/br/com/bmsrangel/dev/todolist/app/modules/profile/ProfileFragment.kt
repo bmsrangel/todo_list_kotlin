@@ -5,6 +5,9 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -26,13 +29,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private val PERMISSION_REQUEST_CAMERA = 0
-    private val PERMISSON_REQUEST_READ_EXTERNAL_STORAGE = 1
+    private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
 
     private var image: Bitmap? = null
 
@@ -100,12 +109,24 @@ class ProfileFragment : Fragment() {
         if (currentUser != null) {
             val displayName = currentUser.displayName
             val email = currentUser.email
-            var photoUrl = currentUser.photoUrl
+            val photoUrl = currentUser.photoUrl
 
-            val splittedName = displayName?.split(" ")
-            // TODO: Verify if the display name contains in fact 2 names; change to handle the case where there's just first name
             emailEditTxtRef.setText(email)
             nameEditTextRef.setText(displayName)
+            val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
+            if (photoUrl != null) {
+              Thread {
+                  val file = saveLocalFile(photoUrl.toString())
+                  activity.runOnUiThread {
+                      val bitmap = BitmapFactory.decodeFile(file.path)
+                      profileImageRef.setImageBitmap(bitmap)
+                  }
+              }.start()
+            } else {
+                val personDrawable = ContextCompat.getDrawable(activity, R.drawable.baseline_person_24)!!.mutate()
+                personDrawable.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(activity, R.color.infnet_blue), PorterDuff.Mode.SRC_IN)
+                profileImageRef.setImageDrawable(personDrawable)
+            }
         }
 
         cameraButtonRef.setOnClickListener {
@@ -125,7 +146,7 @@ class ProfileFragment : Fragment() {
         }
 
         if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSON_REQUEST_READ_EXTERNAL_STORAGE)
+            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
         }
 
         return view
@@ -140,16 +161,16 @@ class ProfileFragment : Fragment() {
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 println("Camera")
-                Toast.makeText(activity, "Permissão de câmera concedida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.cameraPermissionGrantedText), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(activity, "Permissão de câmera negada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.cameraPermissionDeniedText), Toast.LENGTH_SHORT).show()
             }
-        } else if (requestCode == PERMISSON_REQUEST_READ_EXTERNAL_STORAGE) {
+        } else if (requestCode == PERMISSION_REQUEST_READ_EXTERNAL_STORAGE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 println("Galeria")
-                Toast.makeText(activity, "Permissão de galeria concedida", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.galleryPermissionGrantedText), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(activity, "Permissão de galeria negada", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.galleryPermissionDeniedText), Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -178,11 +199,57 @@ class ProfileFragment : Fragment() {
     }
 
     private fun saveProfile(name: String) {
-        val changeRequest = userProfileChangeRequest {
-            displayName = name
+        val storage = FirebaseStorage.getInstance()
+        val storageRef = storage.reference
+        val uid = firebaseAuth.currentUser!!.uid
+
+        val imageRef = storageRef.child("profile_images/$uid")
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        this.image?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        val data = byteArrayOutputStream.toByteArray()
+        val uploadTask = imageRef.putBytes(data)
+        uploadTask.addOnFailureListener {
+            Toast.makeText(activity, "Falha ao salvar imagem", Toast.LENGTH_SHORT).show()
+        }.addOnSuccessListener {
+            imageRef.downloadUrl.addOnSuccessListener {uri ->
+                val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(name).setPhotoUri(Uri.parse(uri.toString())).build()
+                firebaseAuth.currentUser?.updateProfile(profileUpdates)?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Toast.makeText(activity, "Perfil atualizado com sucesso", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(activity, "Falha ao atualizar o perfil", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+
         }
-        firebaseAuth.currentUser?.updateProfile(changeRequest)
+
+
     }
 
-    private fun saveLocalFile() {}
+    private fun saveLocalFile(imageUrl: String): File {
+        val url = URL(imageUrl)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.doInput = true
+        connection.connect()
+
+        val input = connection.inputStream
+        val dir = File(activity.getExternalFilesDir(null), "images")
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
+        val file = File(dir, "profile.jpg")
+        val output = FileOutputStream(file)
+        val buffer = ByteArray(1024 )
+        var read: Int
+        while(input.read(buffer).also { read = it } != -1) {
+            output.write(buffer, 0, read)
+        }
+        output.flush()
+        output.close()
+        input.close()
+
+        return file
+    }
 }
