@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
+import br.com.bmsrangel.dev.todolist.app.core.dtos.ProfileDTO
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
 import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.modules.main.MainActivity
@@ -73,5 +74,23 @@ class FirebaseAuthRepositoryImpl @Inject constructor(private val firebaseAuth: F
         } catch (e: java.lang.Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun updateUserProfile(profileDTO: ProfileDTO): Result<Boolean> {
+        val profileUpdates = UserProfileChangeRequest.Builder()
+        if (profileDTO.name != null) {
+            profileUpdates.displayName = profileDTO.name
+        }
+        if (profileDTO.photoUri != null) {
+            profileUpdates.photoUri = profileDTO.photoUri
+        }
+        return try {
+            firebaseAuth.currentUser!!.updateProfile(profileUpdates.build()).await()
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+
+
     }
 }

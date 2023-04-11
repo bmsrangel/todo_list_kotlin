@@ -5,6 +5,10 @@ import android.net.Uri
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.tasks.await
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import javax.inject.Inject
 
 
@@ -24,5 +28,30 @@ class FirebaseStorageRepositoryImpl @Inject constructor(private val firebaseStor
             val url = Uri.parse(imageDownloadUri.toString())
             Result.success(url)
         }
+    }
+
+    override fun downloadAndSaveLocalImage(imageUrl: String, imageDirectory: String): File {
+        val url = URL(imageUrl)
+        val connection = url.openConnection() as HttpURLConnection
+        connection.doInput = true
+        connection.connect()
+
+        val input = connection.inputStream
+        val dir = File(imageDirectory)
+        if (!dir.exists()) {
+            dir.mkdir()
+        }
+        val file = File(dir, "profile.jpg")
+        val output = FileOutputStream(file)
+        val buffer = ByteArray(1024 )
+        var read: Int
+        while(input.read(buffer).also { read = it } != -1) {
+            output.write(buffer, 0, read)
+        }
+        output.flush()
+        output.close()
+        input.close()
+
+        return file
     }
 }

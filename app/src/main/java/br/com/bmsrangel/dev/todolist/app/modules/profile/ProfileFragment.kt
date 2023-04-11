@@ -11,6 +11,7 @@ import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,14 +23,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.dtos.ProfileDTO
 import br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
 import br.com.bmsrangel.dev.todolist.app.modules.profile.viewmodels.profile_image.ProfileImageViewModel
+import br.com.bmsrangel.dev.todolist.app.modules.profile.viewmodels.profile_image.states.ErrorProfileImageState
+import br.com.bmsrangel.dev.todolist.app.modules.profile.viewmodels.profile_image.states.SuccessProfileImageState
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,9 +42,6 @@ import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
@@ -51,7 +51,7 @@ class ProfileFragment : Fragment() {
     private val PERMISSION_REQUEST_CAMERA = 0
     private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
 
-    private var image: Bitmap? = null
+//    private var image: Bitmap? = null
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var activity: Activity
@@ -90,7 +90,8 @@ class ProfileFragment : Fragment() {
         val updateProfileButtonRef = CustomButtonFragment()
         updateProfileButtonRef.buttonText = getString(R.string.profileUpdateButtonText)
         updateProfileButtonRef.onClick = {
-            saveProfile(nameEditTextRef.text.toString())
+            val profileDTO = ProfileDTO(nameEditTextRef.text.toString(), null)
+            authViewModel.updateProfile(profileDTO)
             nameEditTextRef.clearFocus()
         }
         childFragmentManager.beginTransaction().replace(R.id.updateProfileBtnFragment, updateProfileButtonRef).commit()
@@ -113,7 +114,7 @@ class ProfileFragment : Fragment() {
         }
         childFragmentManager.beginTransaction().replace(R.id.logoutBtnFragment, logoutButtonRef).commit()
 
-        authViewModel.getUser().observe(requireActivity()) {
+        authViewModel.getUser().observe(requireActivity()) { it ->
             val user = (it as SuccessAuthState).user
             val displayName = user.name
             val email = user.email
@@ -124,46 +125,36 @@ class ProfileFragment : Fragment() {
             val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
             if (photoUrl != null) {
                 Thread {
-                    val file = saveLocalFile(photoUrl.toString())
+                    val directory = File(activity.getExternalFilesDir(null), "images")
+                    val directoryPath = directory.path
+                    profileImageViewModel.downloadAndSaveLocalImage(photoUrl, directoryPath)
                     activity.runOnUiThread {
-                        val bitmap = BitmapFactory.decodeFile(file.path)
+                        val bitmap =
+                            BitmapFactory.decodeFile(profileImageViewModel.imageFile!!.path)
                         profileImageRef.setImageBitmap(bitmap)
                     }
+
                 }.start()
             } else {
-                val personDrawable = ContextCompat.getDrawable(activity, R.drawable.baseline_person_24)!!.mutate()
-                personDrawable.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(activity, R.color.infnet_blue), PorterDuff.Mode.SRC_IN)
+                val personDrawable =
+                    ContextCompat.getDrawable(activity, R.drawable.baseline_person_24)!!
+                        .mutate()
+                personDrawable.colorFilter = PorterDuffColorFilter(
+                    ContextCompat.getColor(activity, R.color.infnet_blue),
+                    PorterDuff.Mode.SRC_IN
+                )
                 profileImageRef.setImageDrawable(personDrawable)
             }
-
         }
 
-//        firebaseAuth = FirebaseAuth.getInstance()
-//
-//
-//        val currentUser = firebaseAuth.currentUser
-//        if (currentUser != null) {
-//            val displayName = currentUser.displayName
-//            val email = currentUser.email
-//            val photoUrl = currentUser.photoUrl
-//
-//            emailEditTxtRef.setText(email)
-//            nameEditTextRef.setText(displayName)
-//            val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
-//            if (photoUrl != null) {
-//              Thread {
-//                  val file = saveLocalFile(photoUrl.toString())
-//                  activity.runOnUiThread {
-//                      val bitmap = BitmapFactory.decodeFile(file.path)
-//                      profileImageRef.setImageBitmap(bitmap)
-//                  }
-//              }.start()
-//            } else {
-//                val personDrawable = ContextCompat.getDrawable(activity, R.drawable.baseline_person_24)!!.mutate()
-//                personDrawable.colorFilter = PorterDuffColorFilter(ContextCompat.getColor(activity, R.color.infnet_blue), PorterDuff.Mode.SRC_IN)
-//                profileImageRef.setImageDrawable(personDrawable)
-//            }
-//        }
+        profileImageViewModel.getImage().observe(viewLifecycleOwner) {
+            if (it is SuccessProfileImageState) {
+                val profileDTO = ProfileDTO(null, it.profileImage)
+                authViewModel.updateProfile(profileDTO)
+            } else if (it is ErrorProfileImageState) {
+                Toast.makeText(activity, "Falha ao carregar imagem", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         cameraButtonRef.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -216,10 +207,8 @@ class ProfileFragment : Fragment() {
             result ->
         if(result.resultCode == AppCompatActivity.RESULT_OK) {
             val capturedImage = result.data?.extras?.get("data") as Bitmap
-            this.image = capturedImage
-            val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
-            profileImageRef.setImageBitmap(capturedImage)
-
+            val user = authViewModel.userModel!!
+            profileImageViewModel.uploadImage(user.uid, capturedImage)
         }
     }
 
@@ -228,62 +217,9 @@ class ProfileFragment : Fragment() {
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
             val selectedImage: Uri? = result.data?.data
             val imageBitmap = MediaStore.Images.Media.getBitmap(activity.contentResolver, selectedImage)
-            this.image = imageBitmap
-            val profileImageRef = view.findViewById<ImageView>(R.id.profileImage)
-            profileImageRef.setImageBitmap(imageBitmap)
+            profileImageViewModel.imageBitmap = imageBitmap
+            val user = (authViewModel.getUser().value as SuccessAuthState).user
+            profileImageViewModel.uploadImage(user.uid, imageBitmap)
         }
-    }
-
-    private fun saveProfile(name: String) {
-        val storage = FirebaseStorage.getInstance()
-        val storageRef = storage.reference
-        val uid = firebaseAuth.currentUser!!.uid
-
-        val imageRef = storageRef.child("profile_images/$uid")
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        this.image?.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-        val data = byteArrayOutputStream.toByteArray()
-        val uploadTask = imageRef.putBytes(data)
-        uploadTask.addOnFailureListener {
-            Toast.makeText(activity, "Falha ao salvar imagem", Toast.LENGTH_SHORT).show()
-        }.addOnSuccessListener {
-            imageRef.downloadUrl.addOnSuccessListener {uri ->
-                val profileUpdates = UserProfileChangeRequest.Builder().setDisplayName(name).setPhotoUri(Uri.parse(uri.toString())).build()
-                firebaseAuth.currentUser?.updateProfile(profileUpdates)?.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Toast.makeText(activity, "Perfil atualizado com sucesso", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(activity, "Falha ao atualizar o perfil", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            }
-
-        }
-    }
-
-    private fun saveLocalFile(imageUrl: String): File {
-        val url = URL(imageUrl)
-        val connection = url.openConnection() as HttpURLConnection
-        connection.doInput = true
-        connection.connect()
-
-        val input = connection.inputStream
-        val dir = File(activity.getExternalFilesDir(null), "images")
-        if (!dir.exists()) {
-            dir.mkdir()
-        }
-        val file = File(dir, "profile.jpg")
-        val output = FileOutputStream(file)
-        val buffer = ByteArray(1024 )
-        var read: Int
-        while(input.read(buffer).also { read = it } != -1) {
-            output.write(buffer, 0, read)
-        }
-        output.flush()
-        output.close()
-        input.close()
-
-        return file
     }
 }

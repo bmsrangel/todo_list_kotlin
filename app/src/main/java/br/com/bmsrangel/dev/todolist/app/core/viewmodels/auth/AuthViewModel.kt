@@ -1,8 +1,11 @@
 package br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth
 
+import android.net.Uri
 import androidx.lifecycle.*
 import br.com.bmsrangel.dev.todolist.app.core.dtos.LoginDTO
+import br.com.bmsrangel.dev.todolist.app.core.dtos.ProfileDTO
 import br.com.bmsrangel.dev.todolist.app.core.dtos.RegisterDTO
+import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.core.repositories.auth.AuthRepository
 import br.com.bmsrangel.dev.todolist.app.core.services.user.UserService
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.*
@@ -10,11 +13,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.URI
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor (private val authRepository: AuthRepository, private val userService: UserService): ViewModel() {
     private var userLiveData: MutableLiveData<AuthState> = MutableLiveData<AuthState>()
+    var userModel: UserModel? = null
 
     fun getUser(): LiveData<AuthState> {
         return userLiveData
@@ -24,6 +29,7 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
         val user = userService.getUser()
         if (user != null) {
             userLiveData.postValue(SuccessAuthState(user))
+            userModel = user
         } else {
             userLiveData.postValue(UnauthenticatedAuthState())
         }
@@ -99,6 +105,20 @@ class AuthViewModel @Inject constructor (private val authRepository: AuthReposit
     fun sendForgotPasswordEmail(email: String) {
         viewModelScope.launch {
             authRepository.resetPassword(email)
+        }
+    }
+
+    fun updateProfile(profileDTO: ProfileDTO) {
+        viewModelScope.launch {
+            val result = withContext(Dispatchers.IO) {
+                authRepository.updateUserProfile(profileDTO)
+            }
+            result.fold({
+                val updatedUser = userService.getUser()
+                userLiveData.postValue(SuccessAuthState(updatedUser!!))
+            }, {
+                println(it.message)
+            })
         }
     }
 }
