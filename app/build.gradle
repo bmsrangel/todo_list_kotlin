@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -49,6 +50,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
     implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.1'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.6'
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'androidx.core:core-ktx'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
