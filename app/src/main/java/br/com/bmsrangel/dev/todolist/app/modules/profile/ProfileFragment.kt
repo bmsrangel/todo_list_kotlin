@@ -26,6 +26,7 @@ import androidx.fragment.app.viewModels
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.dtos.ProfileDTO
 import br.com.bmsrangel.dev.todolist.app.core.fragments.CustomButtonFragment
+import br.com.bmsrangel.dev.todolist.app.core.services.permissions.PermissionsService
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
 import br.com.bmsrangel.dev.todolist.app.modules.auth.LoginActivity
@@ -38,11 +39,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import javax.inject.Inject
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), ActivityCompat.OnRequestPermissionsResultCallback {
     private val authViewModel: AuthViewModel by viewModels()
     private val profileImageViewModel: ProfileImageViewModel by viewModels()
+
+    @Inject
+    lateinit var permissionsService: PermissionsService
 
     private val PERMISSION_REQUEST_CAMERA = 0
     private val PERMISSION_REQUEST_READ_EXTERNAL_STORAGE = 1
@@ -164,12 +169,14 @@ class ProfileFragment : Fragment() {
             galleryLauncher.launch(intent)
         }
 
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
+        val isCameraPermissionGranted = permissionsService.isPermissionGranted(activity, Manifest.permission.CAMERA)
+        if (!isCameraPermissionGranted) {
+            permissionsService.requestPermission(activity, Manifest.permission.CAMERA, PERMISSION_REQUEST_CAMERA)
         }
 
-        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
+        val isExternalStoragePermissionGranted = permissionsService.isPermissionGranted(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+        if (!isExternalStoragePermissionGranted) {
+            permissionsService.requestPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE, PERMISSION_REQUEST_READ_EXTERNAL_STORAGE)
         }
 
         return view
@@ -180,7 +187,6 @@ class ProfileFragment : Fragment() {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 println("Camera")
