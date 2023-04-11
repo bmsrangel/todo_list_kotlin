@@ -52,4 +52,5 @@
     <string name="cameraPermissionDeniedText">Permissão de câmera negada</string>
     <string name="galleryPermissionGrantedText">Permissão de galeria concedida</string>
     <string name="galleryPermissionDeniedText">Permissão de galeria negada</string>
+    <string name="imageLoadErrorText">Falha ao carregar imagem</string>
 </resources>

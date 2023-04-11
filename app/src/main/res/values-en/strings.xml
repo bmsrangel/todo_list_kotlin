@@ -53,4 +53,5 @@
     <string name="cameraPermissionDeniedText">Camera permission denied</string>
     <string name="galleryPermissionGrantedText">Gallery permission granted</string>
     <string name="galleryPermissionDeniedText">Gallery permission denied</string>
+    <string name="imageLoadErrorText">Failed to load image</string>
 </resources>

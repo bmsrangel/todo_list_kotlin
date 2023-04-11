@@ -11,8 +11,6 @@ import android.graphics.PorterDuffColorFilter
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.dtos.ProfileDTO
@@ -37,10 +36,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 @AndroidEntryPoint
@@ -152,7 +148,7 @@ class ProfileFragment : Fragment() {
                 val profileDTO = ProfileDTO(null, it.profileImage)
                 authViewModel.updateProfile(profileDTO)
             } else if (it is ErrorProfileImageState) {
-                Toast.makeText(activity, "Falha ao carregar imagem", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, getString(R.string.imageLoadErrorText), Toast.LENGTH_SHORT).show()
             }
         }
 
