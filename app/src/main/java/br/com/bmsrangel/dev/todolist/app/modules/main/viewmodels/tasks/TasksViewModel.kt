@@ -19,8 +19,6 @@ class TasksViewModel @Inject constructor(private val tasksRepository: TasksRepos
     fun tasks() = tasksLiveData as LiveData<TasksState>
 
     fun fetchTasks(userId: String) {
-        // TODO: check if it's possible to refactor this to work with a single LiveData instead of nested
-        // Transforms.switchMap, perhaps?
         val result = tasksRepository.getTasksByUserId(userId)
         result.fold({
             tasksLiveData = it.map { taskList -> SuccessTasksState(taskList) } as MutableLiveData<TasksState>
@@ -29,8 +27,8 @@ class TasksViewModel @Inject constructor(private val tasksRepository: TasksRepos
         })
     }
 
-    fun removeSelectedTasks(userId: String, taskIdList: Array<String>) {
-        tasksRepository.removeSelectedTasks(userId, taskIdList)
+    fun removeSelectedTasks(userId: String, taskId: String) {
+        tasksRepository.removeTaskById(userId, taskId)
     }
     fun createTask(userId: String, newTaskDto: NewTaskDto) {
         tasksRepository.createNewTask(userId, newTaskDto)

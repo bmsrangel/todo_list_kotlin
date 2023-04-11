@@ -46,11 +46,9 @@ class FirebaseTasksRepositoryImpl @Inject constructor(private val db: FirebaseDa
 
     }
 
-    override fun removeSelectedTasks(userId: String, taskIdList: Array<String>) {
-        val dbRef = db.reference.child("users/$userId/tasks")
-        for (taskId in taskIdList) {
-            dbRef.child(taskId).removeValue()
-        }
+    override fun removeTaskById(userId: String, taskId: String) {
+        val dbRef = db.reference.child("users/$userId/tasks/$taskId")
+        dbRef.removeValue()
     }
 
     override fun createNewTask(userId: String, newTask: NewTaskDto) {

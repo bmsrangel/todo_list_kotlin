@@ -95,6 +95,12 @@ class TasksFragment : Fragment() {
                             intent.putExtra("userId", user.uid)
                             startActivity(intent)
                         }
+
+                        taskListViewRef.setOnItemLongClickListener {_, _, position, _ ->
+                            val selectedTask = taskList[position]
+                            tasksViewModel.removeSelectedTasks(user.uid, selectedTask.id)
+                            true
+                        }
                     }
                 }
 
