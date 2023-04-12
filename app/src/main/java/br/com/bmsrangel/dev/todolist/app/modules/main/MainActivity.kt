@@ -2,9 +2,12 @@ package br.com.bmsrangel.dev.todolist.app.modules.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.TextView
+import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.modules.profile.ProfileFragment
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -17,14 +20,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         supportActionBar?.hide()
         loadFragment(TasksFragment())
+        val toolbarTitleRef = findViewById<MaterialToolbar>(R.id.mainToolbarTitle)
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
         bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.navTasks -> {
+                    toolbarTitleRef.title = getString(R.string.homeAppBarTitle)
                     loadFragment(TasksFragment())
                     true
                 }
                 R.id.navProfile -> {
+                    toolbarTitleRef.title = getString(R.string.profileAppBarTitle)
                     loadFragment(ProfileFragment())
                     true
                 }

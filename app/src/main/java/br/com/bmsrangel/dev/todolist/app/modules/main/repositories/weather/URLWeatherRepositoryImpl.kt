@@ -13,8 +13,9 @@ class URLWeatherRepositoryImpl @Inject constructor(): WeatherRepository {
             val url = "$baseUrl/current.json?key=$apiKey&q=$lat,$long"
             val result = URL(url).readText()
             val data = JSONObject(result)
-            val temperature = data["temp_c"] as Float
-            val conditionCode = (data["condition"] as Map<*, *>)["code"] as Int
+            val current = data.getJSONObject("current")
+            val temperature = current.getDouble("temp_c")
+            val conditionCode = current.getJSONObject("condition").getInt("code")
             val icon = getWeatherIcon(conditionCode)
             val iconColor = getWeatherColor(conditionCode)
             Result.success(WeatherModel(temperature, icon, iconColor))
