@@ -8,11 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import br.com.bmsrangel.dev.todolist.R
 
-class WeatherFragment : Fragment() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
+class WeatherFragment constructor(): Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
