@@ -50,8 +50,6 @@ class TasksFragment : Fragment() {
 
         val googleSignInClient = GoogleSignIn.getClient(activity, googleSignOptions)
 
-        val logoutButtonRef = view.findViewById<ImageView>(R.id.btnLogout)
-
         val newTaskButtonRef = view.findViewById<FloatingActionButton>(R.id.btnNewTask)
 
         val taskListViewRef = view.findViewById<ListView>(R.id.todosList)
@@ -62,14 +60,6 @@ class TasksFragment : Fragment() {
         val tasks = arrayListOf<TaskModel>()
         val adapter = TaskAdapter(activity, tasks)
         taskListViewRef.adapter = adapter
-
-        logoutButtonRef.setOnClickListener {
-            authViewModel.signOut()
-            // TODO: Solve Google signout
-            googleSignInClient.signOut()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-        }
 
         authViewModel.getUser().observe(requireActivity()) {
             if (it is UnauthenticatedAuthState) {
