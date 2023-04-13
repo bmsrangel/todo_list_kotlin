@@ -82,8 +82,10 @@ class WeatherFragment: Fragment() {
             && ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
+        val requestIntervalInSeconds = 3600 // 1 hour
+        val requestIntervalInMs = (requestIntervalInSeconds * 1000).toLong()
         val locationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0f
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, requestIntervalInMs, 0f
         ) { location ->
             lifecycleScope.launch {
                 weatherViewMoModel.getWeatherData(location.latitude, location.longitude)

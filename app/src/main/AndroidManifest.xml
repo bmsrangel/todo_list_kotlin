@@ -22,9 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoList"
         tools:targetApi="31">
-<!--        <meta-data-->
-<!--            android:name="com.google.android.gms.ads.APPLICATION_ID"-->
-<!--            android:value="ADMOB_APP_ID"/>-->
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-5539057851069801~8376338333"/>
         <activity
             android:name=".app.modules.auth.ForgotPasswordActivity"
             android:exported="false"

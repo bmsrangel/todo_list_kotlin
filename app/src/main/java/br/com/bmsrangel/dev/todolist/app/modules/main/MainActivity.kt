@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.modules.profile.ProfileFragment
+import com.google.android.gms.ads.MobileAds
 //import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -20,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-//        MobileAds.initialize(this)
+        MobileAds.initialize(this)
 
         loadFragment(TasksFragment())
         val toolbarTitleRef = findViewById<MaterialToolbar>(R.id.mainToolbarTitle)
