@@ -21,8 +21,10 @@
             app:layout_constraintStart_toStartOf="parent"
             />
 
-        <ListView
-            android:id="@+id/todosList"
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/todosListFragment"
+            android:name="br.com.bmsrangel.dev.todolist.app.core.fragments.ListViewFragment"
+            tools:layout="@layout/fragment_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginHorizontal="16dp"

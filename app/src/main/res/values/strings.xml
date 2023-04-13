@@ -55,4 +55,6 @@
     <string name="imageLoadErrorText">Falha ao carregar imagem</string>
     <string name="weatherTemperature">%s°C</string>
     <string name="weatherErrorText">Falha ao carregar dados de clima</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

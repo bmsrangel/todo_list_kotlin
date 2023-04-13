@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.viewModels
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.fragments.ListViewFragment
 import br.com.bmsrangel.dev.todolist.app.core.models.UserModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.AuthViewModel
 import br.com.bmsrangel.dev.todolist.app.core.viewmodels.auth.states.SuccessAuthState
@@ -41,21 +42,15 @@ class TasksFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_tasks, container, false)
+        val taskListViewRef = ListViewFragment()
+        childFragmentManager.beginTransaction().replace(R.id.todosListFragment, taskListViewRef).commit()
+
         val activity = requireActivity()
-
-        val googleSignOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-
-        val googleSignInClient = GoogleSignIn.getClient(activity, googleSignOptions)
 
         val newTaskButtonRef = view.findViewById<FloatingActionButton>(R.id.btnNewTask)
 
-        val taskListViewRef = view.findViewById<ListView>(R.id.todosList)
         val progressIndicator = view.findViewById<ProgressBar>(R.id.tasksProgressBar)
         progressIndicator.visibility = View.VISIBLE
-        taskListViewRef.visibility = View.GONE
 
         val tasks = arrayListOf<TaskModel>()
         val adapter = TaskAdapter(activity, tasks)
@@ -75,9 +70,9 @@ class TasksFragment : Fragment() {
                         tasks.addAll(taskList)
                         adapter.notifyDataSetChanged()
                         progressIndicator.visibility = View.GONE
-                        taskListViewRef.visibility = View.VISIBLE
+                        taskListViewRef.setListVisibility(View.VISIBLE)
 
-                        taskListViewRef.setOnItemClickListener { _, _, position, _ ->
+                        taskListViewRef.setOnItemClickListener = {position ->
                             val selectedTask = taskList[position]
                             val intent = Intent(activity, SingleTaskActivity::class.java)
                             val serializedTask = Json.encodeToString(selectedTask)
@@ -86,10 +81,9 @@ class TasksFragment : Fragment() {
                             startActivity(intent)
                         }
 
-                        taskListViewRef.setOnItemLongClickListener {_, _, position, _ ->
+                        taskListViewRef.setOnItemLongClickListener = {position ->
                             val selectedTask = taskList[position]
                             tasksViewModel.removeSelectedTasks(user.uid, selectedTask.id)
-                            true
                         }
                     }
                 }
