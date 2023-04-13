@@ -56,4 +56,5 @@
     <string name="imageLoadErrorText">Failed to load image</string>
     <string name="weatherTemperature">%s°C</string>
     <string name="weatherErrorText">Failed to load weather data</string>
+    <string name="unauthorizedNotificationText">Notifications unauthorized</string>
 </resources>

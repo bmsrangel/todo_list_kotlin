@@ -2,11 +2,10 @@ package br.com.bmsrangel.dev.todolist.app.modules.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.TextView
-import android.widget.Toolbar
 import androidx.fragment.app.Fragment
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.modules.profile.ProfileFragment
+//import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,7 +17,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         supportActionBar?.hide()
+
+//        MobileAds.initialize(this)
+
         loadFragment(TasksFragment())
         val toolbarTitleRef = findViewById<MaterialToolbar>(R.id.mainToolbarTitle)
         bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
