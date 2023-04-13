@@ -3,6 +3,7 @@ package br.com.bmsrangel.dev.todolist.app.core.fragments
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
@@ -10,22 +11,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import br.com.bmsrangel.dev.todolist.R
-import br.com.bmsrangel.dev.todolist.app.modules.main.repositories.weather.WeatherRepository
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.weather.WeatherViewModel
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.weather.states.ErrorWeatherState
+import br.com.bmsrangel.dev.todolist.app.core.viewmodels.weather.states.SuccessWeatherState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class WeatherFragment: Fragment() {
-    @Inject
-    lateinit var weatherRepository: WeatherRepository
+    private val weatherViewMoModel: WeatherViewModel by viewModels()
+
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
     }
@@ -33,19 +37,49 @@ class WeatherFragment: Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("WEATHER", "Fragment created")
         val view = inflater.inflate(R.layout.fragment_weather, container, false)
-        if(ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+
+        val iconWeatherRef = view.findViewById<ImageView>(R.id.iconWeatherFragment)
+        val temperatureWeatherRef = view.findViewById<TextView>(R.id.temperatureWeatherFragment)
+        val weatherLoadingRef = view.findViewById<ProgressBar>(R.id.loadingWeatherFragment)
+
+        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             getDeviceLocation(view)
-        }else{
+        } else {
             requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_LOCATION_PERMISSION)
+        }
+        weatherViewMoModel.weatherData().observe(requireActivity()) {
+            when(it) {
+                is SuccessWeatherState -> {
+                    val icon = resources.getIdentifier(it.weatherModel.icon, "drawable", requireContext().packageName)
+                    iconWeatherRef.setImageResource(icon)
+
+                    val color = Color.parseColor(it.weatherModel.iconColor)
+                    iconWeatherRef.setColorFilter(color)
+
+                    temperatureWeatherRef.text = getString(R.string.weatherTemperature, it.weatherModel.temperature.toString())
+                    weatherLoadingRef.visibility = View.GONE
+                    iconWeatherRef.visibility = View.VISIBLE
+                    temperatureWeatherRef.visibility = View.VISIBLE
+                }
+                is ErrorWeatherState -> {
+                    Toast.makeText(requireContext(), getString(R.string.weatherErrorText), Toast.LENGTH_SHORT).show()
+                    weatherLoadingRef.visibility = View.GONE
+                    iconWeatherRef.visibility = View.GONE
+                    temperatureWeatherRef.visibility = View.GONE
+                }
+                else -> {
+                    weatherLoadingRef.visibility = View.VISIBLE
+                    iconWeatherRef.visibility = View.GONE
+                    temperatureWeatherRef.visibility = View.GONE
+                }
+            }
         }
         return view
     }
 
     override fun onDetach() {
         super.onDetach()
-        Log.d("WEATHER", "Fragment detached")
     }
 
     private fun getDeviceLocation(view: View) {
@@ -57,16 +91,7 @@ class WeatherFragment: Fragment() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0f
         ) { location ->
             lifecycleScope.launch {
-                val result = withContext(Dispatchers.IO) {
-                    weatherRepository.getCurrentWeather(location.latitude, location.longitude)
-
-                }
-                Log.d("LOCATION", "${location.latitude},${location.longitude}")
-                result.fold({
-                    Log.d("RESULT", "${it.temperature},${it.icon}")
-                }, {
-                    Toast.makeText(requireActivity(), it.message, Toast.LENGTH_SHORT).show()
-                })
+                weatherViewMoModel.getWeatherData(location.latitude, location.longitude)
             }
         }
     }

@@ -53,6 +53,6 @@
     <string name="galleryPermissionGrantedText">Permissão de galeria concedida</string>
     <string name="galleryPermissionDeniedText">Permissão de galeria negada</string>
     <string name="imageLoadErrorText">Falha ao carregar imagem</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">24ºC</string>
+    <string name="weatherTemperature">%s°C</string>
+    <string name="weatherErrorText">Falha ao carregar dados de clima</string>
 </resources>
