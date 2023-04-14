@@ -58,8 +58,6 @@ class LoginActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        askNotificationPermission()
-
         val editTxtEmail = EmailEditTextFragment()
         supportFragmentManager.beginTransaction().replace(R.id.editTextEmailFragment, editTxtEmail).commit()
         val editTxtPassword = findViewById<EditText>(R.id.editTextLoginPassword)
@@ -101,5 +99,10 @@ class LoginActivity : AppCompatActivity() {
             val intent = Intent(this, RegisterActivity::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        askNotificationPermission()
     }
 }

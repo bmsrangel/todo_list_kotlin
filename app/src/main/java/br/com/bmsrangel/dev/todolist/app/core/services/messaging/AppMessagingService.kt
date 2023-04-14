@@ -6,7 +6,9 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class AppMessagingService @Inject constructor(private val firebaseMessaging: FirebaseMessaging): FirebaseMessagingService() {
+class AppMessagingService: FirebaseMessagingService() {
+    @Inject
+    lateinit var firebaseMessaging: FirebaseMessaging
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("Refreshed Token", token)
