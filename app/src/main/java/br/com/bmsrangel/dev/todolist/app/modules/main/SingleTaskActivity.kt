@@ -15,7 +15,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.core.app.NotificationCompat
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.services.notifications.NotificationService
 import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
@@ -26,9 +25,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SingleTaskActivity : AppCompatActivity() {
@@ -38,6 +35,8 @@ class SingleTaskActivity : AppCompatActivity() {
     private lateinit var userId: String
 
     private lateinit var binding: ActivitySingleTaskBinding
+
+    private val isTest = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,20 +128,20 @@ class SingleTaskActivity : AppCompatActivity() {
         val matchResult = dateRegex.find(scheduleDate)
         val calendar = Calendar.getInstance()
         val (day, month, year) = matchResult!!.destructured
-        calendar.set(year.toInt(), month.toInt(), day.toInt(), 0, 0, 0)
+
+        // Change the flag "isTest" to true to issue a notification one minute later
+        if (isTest) {
+            calendar.add(Calendar.MINUTE, 1)
+        } else {
+            calendar.set(year.toInt(), month.toInt(), day.toInt(), 0, 0, 0)
+        }
 
         Log.d("SCHEDULE", "Scheduled to ${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH)}/${calendar.get(Calendar.YEAR)} ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}")
 
-// Use the commented lines below to test notifications. Notifications will be issued in a minute interval
-//        val calendar2 = Calendar.getInstance()
-//        calendar2.add(Calendar.MINUTE, 1)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar2.timeInMillis, pendingIntent)
         } else {
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar2.timeInMillis, pendingIntent)
         }
         Toast.makeText(this, getString(R.string.notificationScheduledText), Toast.LENGTH_SHORT).show()
     }
