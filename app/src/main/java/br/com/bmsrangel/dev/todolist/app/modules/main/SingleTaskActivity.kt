@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.viewModels
+import br.com.bmsrangel.dev.todolist.BuildConfig
 import br.com.bmsrangel.dev.todolist.R
 import br.com.bmsrangel.dev.todolist.app.core.services.notifications.NotificationService
 import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
@@ -35,8 +36,6 @@ class SingleTaskActivity : AppCompatActivity() {
     private lateinit var userId: String
 
     private lateinit var binding: ActivitySingleTaskBinding
-
-    private val isTest = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,8 +128,8 @@ class SingleTaskActivity : AppCompatActivity() {
         val calendar = Calendar.getInstance()
         val (day, month, year) = matchResult!!.destructured
 
-        // Change the flag "isTest" to true to issue a notification one minute later
-        if (isTest) {
+        // Flag used for testing notification in development environment
+        if (BuildConfig.DEBUG) {
             calendar.add(Calendar.MINUTE, 1)
         } else {
             calendar.set(year.toInt(), month.toInt(), day.toInt(), 0, 0, 0)
