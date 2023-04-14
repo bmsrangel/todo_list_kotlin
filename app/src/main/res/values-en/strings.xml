@@ -57,4 +57,9 @@
     <string name="weatherTemperature">%s°C</string>
     <string name="weatherErrorText">Failed to load weather data</string>
     <string name="unauthorizedNotificationText">Notifications unauthorized</string>
+    <string name="notificationScheduledText">Notification scheduled</string>
+    <string name="taskCreatedText">Task created</string>
+    <string name="taskCreatedMessageText">"The task %s was created and it expires on %s"</string>
+    <string name="taskUpdatedText">Task updated</string>
+    <string name="taskUpdatedMessageText">"Your task %s was updated and it expires on %s"</string>
 </resources>

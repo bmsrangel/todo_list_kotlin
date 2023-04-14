@@ -36,8 +36,6 @@ class TasksFragment : Fragment() {
     private val tasksViewModel: TasksViewModel by viewModels()
     private lateinit var user: UserModel
 
-    private lateinit var binding: FragmentTasksBinding
-
     override fun onStart() {
         super.onStart()
         authViewModel.getUserFromLocalStorage()
@@ -47,15 +45,15 @@ class TasksFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentTasksBinding.inflate(inflater, container, false)
+        val view = inflater.inflate(R.layout.fragment_tasks, container, false)
         val taskListViewRef = ListViewFragment()
         childFragmentManager.beginTransaction().replace(R.id.todosListFragment, taskListViewRef).commit()
 
         val activity = requireActivity()
 
-        val newTaskButtonRef = binding.btnNewTask
+        val newTaskButtonRef = view.findViewById<FloatingActionButton>(R.id.btnNewTask)
 
-        val progressIndicator = binding.tasksProgressBar
+        val progressIndicator = view.findViewById<ProgressBar>(R.id.tasksProgressBar)
         progressIndicator.visibility = View.VISIBLE
 
         val tasks = arrayListOf<TaskModel>()
@@ -101,17 +99,8 @@ class TasksFragment : Fragment() {
             intent.putExtra("userId", user.uid)
             startActivity(intent)
         }
-        return binding.root
+        return view
     }
 
-    private fun createNotificationChannel() {
-        val name = "TodoList"
-        val descriptionText = "Channel for Todo List notifications"
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
-        val channel = NotificationChannel("TODO", name, importance).apply {
-            description = descriptionText
-        }
-        val notificationManager = requireActivity().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
-    }
+
 }

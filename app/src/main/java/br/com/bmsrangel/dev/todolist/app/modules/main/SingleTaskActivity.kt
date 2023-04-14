@@ -1,30 +1,48 @@
 package br.com.bmsrangel.dev.todolist.app.modules.main
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.NotificationCompat
 import br.com.bmsrangel.dev.todolist.R
+import br.com.bmsrangel.dev.todolist.app.core.services.notifications.NotificationService
 import br.com.bmsrangel.dev.todolist.app.modules.main.dtos.NewTaskDto
 import br.com.bmsrangel.dev.todolist.app.modules.main.models.TaskModel
 import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.single_task.SingleTaskViewModel
+import br.com.bmsrangel.dev.todolist.databinding.ActivitySingleTaskBinding
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.decodeFromString
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SingleTaskActivity : AppCompatActivity() {
-    private var selectedTask: TaskModel? = null
     private val singleTaskViewModel: SingleTaskViewModel by viewModels()
+
+    private var selectedTask: TaskModel? = null
     private lateinit var userId: String
+
+    private lateinit var binding: ActivitySingleTaskBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_single_task)
+        binding = ActivitySingleTaskBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         supportActionBar?.hide()
 
@@ -70,18 +88,62 @@ class SingleTaskActivity : AppCompatActivity() {
             if (selectedTask == null) {
                 val newTaskDto = NewTaskDto(editTxtDescriptionRef.text.toString(), editTxtDateRef.text.toString())
                 singleTaskViewModel.createTask(newTaskDto, userId)
+                scheduleNotification(newTaskDto.dueDate, getString(R.string.taskCreatedText), getString(R.string.taskCreatedMessageText, newTaskDto.description , newTaskDto.dueDate))
             } else {
                 val updatedTask = selectedTask!!.copy(description = editTxtDescriptionRef.text.toString(), dueDate = editTxtDateRef.text.toString())
                 singleTaskViewModel.updateTask(updatedTask, userId)
+                scheduleNotification(updatedTask.dueDate, getString(R.string.taskUpdatedText), getString(R.string.taskUpdatedMessageText, updatedTask.description, updatedTask.dueDate))
             }
             onBackPressedDispatcher.onBackPressed()
-
         }
 
+            createNotificationChannel()
     }
 
     private fun getFormattedDate(year: Int, month: Int, dayOfMonth: Int): String {
         val currentMonth = month + 1
         return String.format("%02d/%02d/%04d", dayOfMonth, currentMonth, year)
+    }
+
+    private fun createNotificationChannel() {
+        val name = "TodoList"
+        val descriptionText = "Channel for Todo List notifications"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("TODO", name, importance).apply {
+            description = descriptionText
+        }
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    private fun scheduleNotification(scheduleDate: String, title: String, message: String) {
+        val intent = Intent(this, NotificationService::class.java)
+
+        intent.putExtra("title", title)
+        intent.putExtra("message", message)
+
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val dateRegex = "(\\d{2})/(\\d{2})/(\\d{4})".toRegex()
+        val matchResult = dateRegex.find(scheduleDate)
+        val calendar = Calendar.getInstance()
+        val (day, month, year) = matchResult!!.destructured
+        calendar.set(year.toInt(), month.toInt(), day.toInt(), 0, 0, 0)
+
+        Log.d("SCHEDULE", "Scheduled to ${calendar.get(Calendar.DAY_OF_MONTH)}/${calendar.get(Calendar.MONTH)}/${calendar.get(Calendar.YEAR)} ${calendar.get(Calendar.HOUR_OF_DAY)}:${calendar.get(Calendar.MINUTE)}")
+
+// Use the commented lines below to test notifications. Notifications will be issued in a minute interval
+//        val calendar2 = Calendar.getInstance()
+//        calendar2.add(Calendar.MINUTE, 1)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+//            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar2.timeInMillis, pendingIntent)
+        } else {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar2.timeInMillis, pendingIntent)
+        }
+        Toast.makeText(this, getString(R.string.notificationScheduledText), Toast.LENGTH_SHORT).show()
     }
 }
