@@ -19,8 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title="@string/homeAppBarTitle">
-            <fragment
-                android:id="@+id/weatherFragmentProfile"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/weatherFragmentContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"

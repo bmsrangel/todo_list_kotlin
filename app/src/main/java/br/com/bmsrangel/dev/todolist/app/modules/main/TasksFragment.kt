@@ -1,5 +1,8 @@
 package br.com.bmsrangel.dev.todolist.app.modules.main
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,6 +22,7 @@ import br.com.bmsrangel.dev.todolist.app.modules.main.adapters.TaskAdapter
 import br.com.bmsrangel.dev.todolist.app.modules.main.models.TaskModel
 import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.states.SuccessTasksState
 import br.com.bmsrangel.dev.todolist.app.modules.main.viewmodels.tasks.TasksViewModel
+import br.com.bmsrangel.dev.todolist.databinding.FragmentTasksBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,6 +36,8 @@ class TasksFragment : Fragment() {
     private val tasksViewModel: TasksViewModel by viewModels()
     private lateinit var user: UserModel
 
+    private lateinit var binding: FragmentTasksBinding
+
     override fun onStart() {
         super.onStart()
         authViewModel.getUserFromLocalStorage()
@@ -41,15 +47,15 @@ class TasksFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_tasks, container, false)
+        binding = FragmentTasksBinding.inflate(inflater, container, false)
         val taskListViewRef = ListViewFragment()
         childFragmentManager.beginTransaction().replace(R.id.todosListFragment, taskListViewRef).commit()
 
         val activity = requireActivity()
 
-        val newTaskButtonRef = view.findViewById<FloatingActionButton>(R.id.btnNewTask)
+        val newTaskButtonRef = binding.btnNewTask
 
-        val progressIndicator = view.findViewById<ProgressBar>(R.id.tasksProgressBar)
+        val progressIndicator = binding.tasksProgressBar
         progressIndicator.visibility = View.VISIBLE
 
         val tasks = arrayListOf<TaskModel>()
@@ -95,6 +101,17 @@ class TasksFragment : Fragment() {
             intent.putExtra("userId", user.uid)
             startActivity(intent)
         }
-        return view
+        return binding.root
+    }
+
+    private fun createNotificationChannel() {
+        val name = "TodoList"
+        val descriptionText = "Channel for Todo List notifications"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel("TODO", name, importance).apply {
+            description = descriptionText
+        }
+        val notificationManager = requireActivity().getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 }
